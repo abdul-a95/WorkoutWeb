@@ -12,8 +12,7 @@ def index(request):
             cat_dict[category] = posts
         except Category.DoesNotExist:
             cat_dict[category] = None
-    context_dict["categories"] = cat_dict
-    print context_dict
+    context_dict['categories'] = cat_dict
     return render(request,'workoutweb/index.html', context_dict)
 
 def about(request):

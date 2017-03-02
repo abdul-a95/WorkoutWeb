@@ -21,13 +21,11 @@
     <div>
         {% if categories %}
         <ul>
-            {%  for category in categories %}
-                <li>{{ category.name  }}</li>
-                    {% if category %}
-                        <ul>
-                            <li>{{ category }}</li>
-                        </ul>
-                    {% endif %}
+            {%  for  key,value in categories.items %}
+                    <li>{{ key.name }}</li>
+                    {% for post in value %}
+                        <ul>{{ post.title }}</ul>
+                    {% endfor %}
             {% endfor %}
         </ul>
     {% else %}

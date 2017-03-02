@@ -14,7 +14,12 @@ def populate():
     # This might seem a little bit confusing, but it allows us to iterate
     # through each data structure, and add the data to our models.
 
-    supplements_posts = []
+    supplements_posts = [
+        {"title":"New protein",
+         "content":"Found a new protein powder you guys should try",
+         "likes": 0,
+         "views": 0,}
+    ]
     equipment_posts = []
     programs_posts = []
     exercises_posts = []

@@ -2,19 +2,33 @@
 {% load staticfiles %}
 
 <html>
+
 <head>
     <title>Rango</title>
 </head>
+
 <body>
-<h1>WorkoutWeb</h1>
-<div>
-    WASSUP BITCHESS!!<br/>
-</div>
+    <h1>WorkoutWeb</h1>
+    <div>
+        Hey there!!<br/>
+    </div>
 
-<div>
-    <img src="{% static "images/workout.jpg" %}"
-         alt="Gym logo" />
-</div>
+    <div>
+        <img src="{% static "images/workout.jpg" %}"
+             alt="Gym logo" />
+    </div>
 
-</body>
-</html>
+    <div>
+        {% if categories %}
+        <ul>
+            {%  for category in categories %}
+                <li>{{ category.name  }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <strong>There are no categories present.</strong>
+        {% endif %}
+    </div>
+
+    </body>
+    </html>

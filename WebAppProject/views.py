@@ -16,20 +16,20 @@ def index(request):
     return render(request,'workoutweb/index.html', context_dict)
 
 def about(request):
-    return render(request, 'workout/about.html', {})
+    return render(request, 'workoutweb/about.html', {})
 
 def login(request):
-    return render(request, 'workout/login.html', {})
+    return render(request, 'workoutweb/login.html', {})
 
 def account(request):
-    return render(request, 'workout/account.html', {})
+    return render(request, 'workoutweb/account.html', {})
 
 def nearestgym(request):
-    return render(request, 'workout/nearestgyum.html', {})
+    return render(request, 'workoutweb/nearestgyum.html', {})
 
 def contact(request):
-    return render(request, 'workout/contact.html', {})
+    return render(request, 'workoutweb/contact.html', {})
 
 def faq(request):
-    return render(request, 'workout/faq.html', {})
+    return render(request, 'workoutweb/faq.html', {})
 

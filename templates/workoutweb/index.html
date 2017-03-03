@@ -40,7 +40,7 @@
         background-color: #555;
         color: white;
         padding: 15px;
-        position: absolute;
+        position: relative;
         bottom: 0;
         width: 100%;
 
@@ -94,9 +94,10 @@
         {% if categories %}
         <ul>
             {%  for  key,value in categories.items %}
-                    <li>{{ key.name }}</li>
+                    <h2><a href="{% url 'show_category' key.slug %}">{{ key.name }}</a></h2>
                     {% for post in value %}
-                        <ul>{{ post.title }}</ul>
+                        <ul><h2>{{ post.title }}</h2></ul>
+                        <ul><ul>{{ post.content }}</ul></ul>
                     {% endfor %}
             {% endfor %}
         </ul>

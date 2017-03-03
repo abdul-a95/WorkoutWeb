@@ -22,6 +22,11 @@ class UserProfile(models.Model):
 
 
 class Category(models.Model):
+    slug = models.SlugField(unique=True)
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Category, self).save(*args,**kwargs)
+
     name = models.CharField(max_length=128, unique=True)
     class Meta:
         verbose_name_plural = 'Categories'

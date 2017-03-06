@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from WebAppProject.models import Category, Post
+from django.core.urlresolvers import reverse
 
 def index(request):
     category_list = Category.objects.order_by()[:6]

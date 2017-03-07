@@ -154,15 +154,17 @@
                 <thead>
                 <tr>
                     <th>Title</th>
+                    <th>Post</th>
                     <th>Likes</th>
                     <th>Views</th>
                 </tr>
                 </thead>
 
-                    {% for post in value %}
+                {% for post in value %}
                 <tbody>
                 <tr>
                     <td>{{post.title}}</td>
+                    <td>{{post.content}}</td>
                     <td>{{post.likes}}</td>
                     <td>{{post.views}}</td>
                 </tr>

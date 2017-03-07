@@ -5,7 +5,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE',
 import django
 django.setup()
 
-from WebAppProject.models import Category, Post
+from WebAppProject.models import Category, Post, Comment
 
 def populate():
     # First, we will create lists of dictionaries containing the pages

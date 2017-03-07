@@ -1,7 +1,8 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from WebAppProject.models import Category, Post
+from WebAppProject.models import Category, Post, Comment
 from django.core.urlresolvers import reverse
+from WebAppProject.forms import PostForm, CommentForm
 
 def index(request):
     category_list = Category.objects.order_by()[:6]
@@ -9,11 +10,12 @@ def index(request):
     cat_dict = {}
     for category in category_list:
         try:
-            posts = Post.objects.filter(category=category)
+            posts = Post.objects.filter(category=category).order_by('-likes')[:5]
             cat_dict[category] = posts
         except Category.DoesNotExist:
             cat_dict[category] = None
     context_dict['categories'] = cat_dict
+
     return render(request,'workoutweb/index.html', context_dict)
 
 def about(request):
@@ -39,26 +41,63 @@ def show_category(request, category_name_slug):
     # to the template rendering engine.
     context_dict = {}
     try:
-        # Can we find a category name slug with the given name?
-        # If we can't, the .get() method raises a DoesNotExist exception.
-        # So the .get() method returns one model instance or raises an exception.
         category = Category.objects.get(slug=category_name_slug)
-
-        # Retrieve all of the associated pages.
-        # Note that filter() will return a list of page objects or an empty list
-        posts = Post.objects.filter(category=category)
-
-        # Adds our results list to the template context under name pages.
-        # We also add the category object from
-        # the database to the context dictionary.
-        # We'll use this in the template to verify that the category exists.
+        posts = Post.objects.filter(category=category).order_by('-likes')
         context_dict['category'] = category
+        context_dict['posts'] = posts
     except Category.DoesNotExist:
-        # We get here if we didn't find the specified category.
-        # Don't do anything -
-        # the template will display the "no category" message for us.
         context_dict['category'] = None
         context_dict['posts'] = None
-        # Go render the response and return it to the client.
+
+    try:
+        category =  Category.objects.get(slug=category_name_slug)
+    except Category.DoesNotExist:
+        category = None
+    form = PostForm()
+    # A HTTP POST?
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        # Have we been provided with a valid form?
+        if form.is_valid():
+            if category:
+                post = form.save(commit=False)
+                post.category = category
+                post.save()
+        else:
+            print(form.errors)
+    context_dict['form'] = form
     return render(request, 'workoutweb/category.html', context_dict)
+
+
+def show_post(request, post_name_slug):
+    # Create a context dictionary which we can pass
+    # to the template rendering engine.
+    context_dict = {}
+    try:
+        post = Post.objects.get(slug=post_name_slug)
+        print post
+        comments = Comment.objects.filter(post=post)
+        context_dict['post'] = post
+        context_dict['comments'] = comments
+    except Post.DoesNotExist:
+        context_dict['post'] = None
+        context_dict['comments'] = None
+
+    try:
+        post =  Post.objects.get(slug=post_name_slug)
+    except Post.DoesNotExist:
+        post = None
+    form = CommentForm()
+    # A HTTP POST?
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        # Have we been provided with a valid form?
+        if form.is_valid():
+            if post:
+                comment = form.save(commit=False)
+                comment.post = post
+                comment.save()
+
+    context_dict['form'] = form
+    return render(request, 'workoutweb/post.html', context_dict)
 

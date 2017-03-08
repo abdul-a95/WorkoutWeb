@@ -40,6 +40,7 @@ def show_category(request, category_name_slug):
     # Create a context dictionary which we can pass
     # to the template rendering engine.
     context_dict = {}
+    context_dict['repeat'] = None
     try:
         category = Category.objects.get(slug=category_name_slug)
         posts = Post.objects.filter(category=category).order_by('-likes')
@@ -60,16 +61,20 @@ def show_category(request, category_name_slug):
         # Have we been provided with a valid form?
         if form.is_valid():
             if category:
-                post = form.save(commit=False)
-                post.category = category
-                post.save()
+                try:
+                    post = form.save(commit=False)
+                    post.category = category
+                    post.save()
+                    context_dict['repeat'] = None
+                except:
+                    context_dict['repeat'] = 'Post title exists.'
         else:
             print(form.errors)
     context_dict['form'] = form
     return render(request, 'workoutweb/category.html', context_dict)
 
 
-def show_post(request, post_name_slug):
+def show_post(request, post_name_slug, category_name_slug):
     # Create a context dictionary which we can pass
     # to the template rendering engine.
     context_dict = {}

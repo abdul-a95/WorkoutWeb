@@ -17,7 +17,7 @@
          {% else %}
              <strong>No comments, be the first to reply!</strong>
          {% endif %}
-          <form id="comment_form" method="post" action="/workoutweb/post/{{ post.slug }}/">
+          <form id="comment_form" method="post" action="/workoutweb/category/{{ post.category.slug }}/{{ post.slug }}/">
                 {% csrf_token %}
                 {% for hidden in form.hidden_fields %}
                     {{ hidden }}

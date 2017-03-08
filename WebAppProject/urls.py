@@ -12,6 +12,6 @@ urlpatterns = [
     url(r'^faq/', views.faq, name='faq'),
     url(r'^category/(?P<category_name_slug>[\w\-]+)/$',
         views.show_category, name='show_category'),
-    url(r'^post/(?P<post_name_slug>[\w\-]+)/$',
+    url(r'^category/(?P<category_name_slug>[\w\-]+)/(?P<post_name_slug>[\w\-]+)/$',
         views.show_post, name='show_post'),
 ]

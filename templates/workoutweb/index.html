@@ -8,109 +8,40 @@
   <title>Index Page</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3/css/bootstrap.min.css">
+  <!--<link rel="stylesheet" type="text/css" href="static/styles.css" media="screen" />-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <style>
-
-    html{
-        height: 100%
-    }
-    body{
-        min-height:100%
-    }
-    /* Remove the navbar's default margin-bottom and rounded borders */
-    .navbar {
-      margin-bottom: 0;
-      border-radius: 0;
-    }
-
-    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-    .row.content {height: 450px}
-
-    /* Set gray background color and 100% height */
-    .sidenav {
-      padding-top: 20px;
-      background-color: #f1f1f1;
-      height: 100%;
-    }
-
-    /* Set black background color, white text and some padding */
-    footer {
-        background-color: #555;
-        color: white;
-        padding: 15px;
-        position: relative;
-        bottom: 0;
-        width: 100%;
-
-    }
-
-    /* On small screens, set height to 'auto' for sidenav and grid */
-    @media screen and (max-width: 767px) {
-      .sidenav {
-        height: auto;
-        padding: 15px;
-      }
-      .row.content {height:auto;}
-    }
-
-    ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #85C1E9;
-    }
-
-    li {
-    float: left;
-    }
-
-    li a {
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-    }
-
-    li a:hover:not(.active) {
-    background-color: #111;
-    }
-
-    .active {
-    background-color: #4CAF50;
-
-    }
-
-</style>
 </head>
 
 <body>
-<ul>
-    <li class="active"><a href="">Home</a></li>
-    <li><a href="/accounts/register/">Sign Up</a></li>
-    <li><a href="/accounts/login/">Login</a></li>
-    <li><a href="#">Page 3</a></li>
-</ul>
 
-    <!--<nav class="navbar navbar-inverse">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand">WorkoutWeb</a>
-        </div>
-            <ul class="nav navbar-nav">
-              <li class="active"><a href="">Home</a></li>
-              <li><a href="#">Page 1</a></li>
-              <li><a href="#">Page 2</a></li>
-              <li><a href="#">Page 3</a></li>
-            </ul>
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="/login/"><span class="glyphicon glyphicon-log-in"></span> Login/Sign up</a></li>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">WorkoutWeb</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="">Home</a></li>
+      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="">Categories <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+            {%if categories %}
+            {% for category in categories %}
+                <li><a href="{% url 'show_category' category.slug %}">{{ category.name }}</a></li>
+            {%  endfor %}
+            {% endif %}
         </ul>
-      </div>
-    </nav>-->
+      <li><a href="workoutweb/nearest-gym">Find Nearest Gym</a></li>
+      <li><a href="workoutweb/about">About Us</a></li>
+    <li><a href="workoutweb/contact">Contact Us</a></li>
+    <li><a href="workoutweb/faq">FAQ</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="/accounts/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+      <li><a href="/accounts/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+    </ul>
+  </div>
+</nav>
 
 
     <div class="container">

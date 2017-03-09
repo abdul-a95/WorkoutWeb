@@ -29,6 +29,19 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# If True, users can register
+REGISTRATION_OPEN = True
+# One-week activation window; you may, of course, use a different value.
+ACCOUNT_ACTIVATION_DAYS = 7
+# If True, the user will be automatically logged in.
+REGISTRATION_AUTO_LOGIN = True
+# The page you want users to arrive at after they successfully log in
+LOGIN_REDIRECT_URL = '/workoutweb/'
+# The page users are directed to if they are not logged in,
+# and are trying to access pages requiring authentication
+LOGIN_URL = '/accounts/login/'
+
+SITE_ID = 2
 
 # Application definition
 
@@ -39,10 +52,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'WebAppProject'
+    'django.contrib.sites',
+    'WebAppProject',
+    'registration',
 ]
 
-MIDDLEWARE = [
+MIDDLEWARE_CLASSES= [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -94,6 +109,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {'min_length':8,}
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -103,6 +119,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+PASSWORD_HASHERS = (
+'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/

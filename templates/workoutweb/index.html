@@ -40,7 +40,7 @@
         background-color: #555;
         color: white;
         padding: 15px;
-        position: absolute;
+        position: relative;
         bottom: 0;
         width: 100%;
 
@@ -54,12 +54,48 @@
       }
       .row.content {height:auto;}
     }
-  </style>
+
+    ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #85C1E9;
+    }
+
+    li {
+    float: left;
+    }
+
+    li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    }
+
+    li a:hover:not(.active) {
+    background-color: #111;
+    }
+
+    .active {
+    background-color: #4CAF50;
+
+    }
+
+</style>
 </head>
 
 <body>
+<ul>
+    <li class="active"><a href="">Home</a></li>
+    <li><a href="/accounts/register/">Sign Up</a></li>
+    <li><a href="/accounts/login/">Login</a></li>
+    <li><a href="#">Page 3</a></li>
+</ul>
 
-    <nav class="navbar navbar-inverse">
+    <!--<nav class="navbar navbar-inverse">
       <div class="container-fluid">
         <div class="navbar-header">
           <a class="navbar-brand">WorkoutWeb</a>
@@ -74,7 +110,7 @@
           <li><a href="/login/"><span class="glyphicon glyphicon-log-in"></span> Login/Sign up</a></li>
         </ul>
       </div>
-    </nav>
+    </nav>-->
 
 
     <div class="container">
@@ -91,13 +127,50 @@
     </center>
 
     <div>
+
         {% if categories %}
         <ul>
             {%  for  key,value in categories.items %}
-                    <li>{{ key.name }}</li>
-                    {% for post in value %}
-                        <ul>{{ post.title }}</ul>
+                    <h2><a href="{% url 'show_category' key.slug %}">{{ key.name }}</a></h2>
+
+            <style>
+            table {
+            border-collapse: collapse;
+            }
+            table, th, td {
+            border: 1px solid black;
+            }
+
+            tr:hover {background-color: #D7DBDD}
+
+            th, td {
+            padding: 15px;
+            text-align: left;
+            }
+            </style>
+
+            <table>
+
+                <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Post</th>
+                    <th>Likes</th>
+                    <th>Views</th>
+                </tr>
+                </thead>
+
+                {% for post in value %}
+                <tbody>
+                <tr>
+                    <td>{{post.title}}</td>
+                    <td>{{post.content}}</td>
+                    <td>{{post.likes}}</td>
+                    <td>{{post.views}}</td>
+                </tr>
                     {% endfor %}
+                </tbody>
+            </table>
             {% endfor %}
         </ul>
     {% else %}

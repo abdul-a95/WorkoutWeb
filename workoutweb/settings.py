@@ -41,6 +41,7 @@ LOGIN_REDIRECT_URL = '/workoutweb/'
 # and are trying to access pages requiring authentication
 LOGIN_URL = '/accounts/login/'
 
+SITE_ID = 2
 
 # Application definition
 

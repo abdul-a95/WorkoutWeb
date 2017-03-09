@@ -13,13 +13,10 @@ class UserProfile(models.Model):
     # links UserProfile to a user model instance
     user = models.OneToOneField(User)
 
-    website = models.URLField(blank=True)
     picture = models.ImageField(upload_to='profile_images',blank=True)
 
     def __str__(self):
         return self.user.username
-
-
 
 class Category(models.Model):
     slug = models.SlugField(unique=True)

@@ -3,8 +3,9 @@ from django.shortcuts import render
 from WebAppProject.models import Category, Post, Comment
 from django.core.urlresolvers import reverse
 from WebAppProject.forms import PostForm, CommentForm
-from WebAppProject.forms import UserForm, UserProfileForm
+from WebAppProject.forms import UserForm,ProfileForm
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 def index(request):
@@ -113,11 +114,14 @@ def register(request):
     registered = False
     if request.method == 'POST':
         user_form = UserForm(data=request.POST)
-        profile_form = UserProfileForm(data=request.POST)
+        profile_form = ProfileForm(data=request.POST)
+
         if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save()
+
             user.set_password(user.password)
             user.save()
+
             profile = profile_form.save(commit=False)
             profile.user = user
 
@@ -133,7 +137,7 @@ def register(request):
         else:
 
             user_form = UserForm()
-            profile_form = UserProfileForm()
+            profile_form = ProfileForm()
 
         return render(request,'workoutweb/register.html',{'user_form': user_form,
                                                           'profile_form': profile_form,
@@ -185,5 +189,11 @@ def user_login(request):
 @login_required
 def restricted(request):
     return render(request, 'workoutweb/restricted.html',{})
+
+def update_profile(request, user_id):
+    user = User.objects.get(pk=user_id)
+    user.profile.weight = '155'
+    user.profile.height = '170'
+    user.save()
 
 

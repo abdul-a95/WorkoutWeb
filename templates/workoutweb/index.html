@@ -91,7 +91,11 @@
 <ul>
     <li class="active"><a href="">Home</a></li>
     <li><a href="/accounts/register/">Sign Up</a></li>
-    <li><a href="/accounts/login/">Login</a></li>
+                  {% if user.is_authenticated %}
+                    <li><a href="/accounts/logout/">Logout</a></li>
+                {% else %}
+                    <li><a href="/accounts/login/">Login</a></li>
+                {% endif %}
     <li><a href="#">Page 3</a></li>
 </ul>
 
@@ -115,7 +119,14 @@
 
     <div class="container">
       <div class="jumbotron" style="text-align:center">
-        <h1>Welcome</h1>
+          {% if user1 %}
+            {% for user in user1 %}
+
+                    <h1>Welcome {{user}}</h1>
+            {% endfor %}
+          {% else %}
+          <h1>Welcome</h1>
+          {% endif %}
         <p>WorkoutWeb is the most popular forum page on the web including posts on: Workout Tutorials,
             Nutritional Meals, bla, bla, bla.</p>
       </div>

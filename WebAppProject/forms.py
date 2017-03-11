@@ -29,23 +29,23 @@ class CommentForm(forms.ModelForm):
             fields = ('title', 'content')
 
 
+#class UserForm(forms.ModelForm):
+    # name = forms.CharField(label='Full Name')
+    # password1 = forms.CharField(label='Password', widget=forms.PasswordInput())
+    # password2 = forms.CharField(label='Password Confirmation', widget=forms.PasswordInput(),
+    #                             help_text="Please Enter the same password as above")
+    # weight = forms.IntegerField(label='Weight')
+    # height = forms.IntegerField(label='Height')
+
+   # class Meta:
+    #    model = User
+     #   fields = ['name','username','email','password','weight','height']
+
+
 class UserForm(forms.ModelForm):
-    name = forms.CharField(label='Full Name')
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput())
-    password2 = forms.CharField(label='Password Confirmation', widget=forms.PasswordInput(),
-                                help_text="Please Enter the same password as above")
-    weight = forms.IntegerField(label='Weight')
-    height = forms.IntegerField(label='Height')
-
-    class Meta:
-        model = User
-        fields = ('name','username','email','password','weight','height')
-
-
-class UserProfileForm(forms.ModelForm):
       class Meta:
-          model = UserProfile
-          fields = ('picture',)
+          model = User
+          fields = ['first_name', 'last_name', 'email']
 
           def clean_password2(self):
               password1 = self.cleaned_data.get("password1")
@@ -65,3 +65,8 @@ class UserProfileForm(forms.ModelForm):
               if commit:
                   user.save()
               return user
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ('height','weight')

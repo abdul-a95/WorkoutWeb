@@ -1,15 +1,18 @@
 from django.http import HttpResponse,HttpResponseRedirect
 from django.shortcuts import render
-from WebAppProject.models import Category, Post, Comment
+from WebAppProject.models import Category, Post, Comment, UserProfile
 from django.core.urlresolvers import reverse
 from WebAppProject.forms import PostForm, CommentForm
-from WebAppProject.forms import UserForm, UserProfileForm
+from WebAppProject.forms import UserForm,UserProfileForm
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 def index(request):
     category_list = Category.objects.order_by()[:6]
+    user = UserProfile.objects.filter(user_id=request.user.id)
     context_dict = {}
+    context_dict['user1'] = user
     cat_dict = {}
     for category in category_list:
         try:
@@ -23,9 +26,6 @@ def index(request):
 
 def about(request):
     return render(request, 'workoutweb/about.html', {})
-
-def login(request):
-    return render(request, 'workoutweb/login.html', {})
 
 def account(request):
     return render(request, 'workoutweb/account.html', {})
@@ -114,10 +114,13 @@ def register(request):
     if request.method == 'POST':
         user_form = UserForm(data=request.POST)
         profile_form = UserProfileForm(data=request.POST)
+
         if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save()
+
             user.set_password(user.password)
             user.save()
+
             profile = profile_form.save(commit=False)
             profile.user = user
 
@@ -126,21 +129,22 @@ def register(request):
 
                 profile.save()
 
-                registered = True
             else:
 
                 print(user_form.errors, profile_form.errors)
-        else:
+            registered = True
+    else:
 
-            user_form = UserForm()
-            profile_form = UserProfileForm()
+        user_form = UserForm()
+        profile_form = UserProfileForm()
 
-        return render(request,'workoutweb/register.html',{'user_form': user_form,
+    return render(request,'registration/registration_form.html',{'user_form': user_form,
                                                           'profile_form': profile_form,
                                                           'registered': registered})
 
 
 def user_login(request):
+    print "@@@@@@"
     # If the request is a HTTP POST, try to pull out the relevant information.
     if request.method == 'POST':
         # Gather the username and password provided by the user.
@@ -156,7 +160,6 @@ def user_login(request):
         # Use Django's machinery to attempt to see if the username/password
         # combination is valid - a User object is returned if it is.
         user = authenticate(username=username, password=password)
-
         # If we have a User object, the details are correct.
         # If None (Python's way of representing the absence of a value), no user
         # with matching credentials was found.
@@ -179,11 +182,22 @@ def user_login(request):
     else:
         # No context variables to pass to the template system, hence the
         # blank dictionary object...
-        return render(request, 'workoutweb/login.html', {})
+        return render(request, 'registration/login.html', {})
 
 
 @login_required
 def restricted(request):
     return render(request, 'workoutweb/restricted.html',{})
 
+def update_profile(request, user_id):
+    user = User.objects.get(pk=user_id)
+    user.profile.weight = '155'
+    user.profile.height = '170'
+    user.save()
 
+
+def user_logout(request):
+    # Since we know the user is logged in, we can now just log them out.
+    logout(request)
+    # Take the user back to the homepage.
+    return HttpResponseRedirect(reverse('index'))

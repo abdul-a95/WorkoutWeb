@@ -29,6 +29,12 @@ urlpatterns = [
     url(r'^$', views.index, name ='index'),
     url(r'^workoutweb/', include('WebAppProject.urls')),
     url(r'^admin/', admin.site.urls),
-    url(r'^accounts/', include('registration.backends.simple.urls')),#
+    url(r'^accounts/register/$',
+        views.register, name='Register'),
+    url(r'^accounts/logout/$',
+        views.user_logout, name='Logout'),
+    url(r'^accounts/login/$',
+        views.user_login, name='Login'),
+    url(r'^accounts/', include('registration.backends.simple.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

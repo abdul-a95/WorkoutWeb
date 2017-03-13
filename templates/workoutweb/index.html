@@ -8,127 +8,80 @@
   <title>Index Page</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!--<link rel="stylesheet" type="text/css" href="static/styles.css" media="screen" />-->
+  <link rel="stylesheet" type="text/css" href="../static/styles.css"  media="screen" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 
 <body>
-<<<<<<< HEAD
 
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">WorkoutWeb</a>
-    </div>
-    <ul class="nav navbar-nav">
-      <li class="active"><a href="">Home</a></li>
-      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="">Categories <span class="caret"></span></a>
-        <ul class="dropdown-menu">
-            {%if categories %}
-            {% for category in categories %}
-                <li><a href="{% url 'show_category' category.slug %}">{{ category.name }}</a></li>
-            {%  endfor %}
-            {% endif %}
-=======
-<ul>
-    <li class="active"><a href="">Home</a></li>
-    <li><a href="/accounts/register/">Sign Up</a></li>
-                  {% if user.is_authenticated %}
-                    <li><a href="/accounts/logout/">Logout</a></li>
-                {% else %}
-                    <li><a href="/accounts/login/">Login</a></li>
-                {% endif %}
-    <li><a href="#">Page 3</a></li>
-</ul>
 
-    <!--<nav class="navbar navbar-inverse">
+    <nav class="navbar navbar-inverse">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand">WorkoutWeb</a>
+          <a class="navbar-brand" href="">WorkoutWeb</a>
         </div>
-            <ul class="nav navbar-nav">
-              <li class="active"><a href="">Home</a></li>
-              <li><a href="#">Page 1</a></li>
-              <li><a href="#">Page 2</a></li>
-              <li><a href="#">Page 3</a></li>
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="">Home</a></li>
+          <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="">Categories <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                {%if categories %}
+                {% for category in categories %}
+                    <li><a href="{% url 'show_category' category.slug %}">{{ category.name }}</a></li>
+                {%  endfor %}
+                {% endif %}
             </ul>
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="/login/"><span class="glyphicon glyphicon-log-in"></span> Login/Sign up</a></li>
->>>>>>> 42be21ba388bb6dda1e96dba1e197de57e0787d7
+          <li><a href="workoutweb/nearest-gym">Find Nearest Gym</a></li>
+          <li><a href="workoutweb/about">About Us</a></li>
+        <li><a href="workoutweb/contact">Contact Us</a></li>
+        <li><a href="workoutweb/faq">FAQ</a></li>
         </ul>
-      <li><a href="workoutweb/nearest-gym">Find Nearest Gym</a></li>
-      <li><a href="workoutweb/about">About Us</a></li>
-    <li><a href="workoutweb/contact">Contact Us</a></li>
-    <li><a href="workoutweb/faq">FAQ</a></li>
-    </ul>
-    <ul class="nav navbar-nav navbar-right">
-      <li><a href="/accounts/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-      <li><a href="/accounts/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-    </ul>
-  </div>
-</nav>
+        <ul class="nav navbar-nav navbar-right">
+            {% if user.is_authenticated %}
+                <li><a href="/accounts/logout/"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+            {% else %}
+                <li><a href="/accounts/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                <li><a href="/accounts/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            {% endif %}
+        </ul>
+      </div>
+    </nav>
 
 
     <div class="container">
       <div class="jumbotron" style="text-align:center">
-          {% if user1 %}
-            {% for user in user1 %}
-
-                    <h1>Welcome {{user}}</h1>
-            {% endfor %}
-          {% else %}
-          <h1>Welcome</h1>
-          {% endif %}
+        <h1>Welcome</h1>
         <p>WorkoutWeb is the most popular forum page on the web including posts on: Workout Tutorials,
             Nutritional Meals, bla, bla, bla.</p>
       </div>
     </div>
 
-    <center>
+    <div class= "topcorner">
         <img src="{% static "images/workout.jpg" %}"
              alt="Gym logo" />
-    </center>
+    </div>
 
     <div>
 
         {% if categories %}
         <ul>
             {%  for  key,value in categories.items %}
-                    <h2><a href="{% url 'show_category' key.slug %}">{{ key.name }}</a></h2>
-
-            <style>
-            table {
-            border-collapse: collapse;
-            }
-            table, th, td {
-            border: 1px solid black;
-            }
-
-            tr:hover {background-color: #D7DBDD}
-
-            th, td {
-            padding: 15px;
-            text-align: left;
-            }
-            </style>
-
+                    <h3><a href="{% url 'show_category' key.slug %}">{{ key.name }}</a></h3>
             <table>
-
                 <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Post</th>
-                    <th>Likes</th>
-                    <th>Views</th>
-                </tr>
+                    <tr>
+                        <th>Title</th>
+                        <th>Post</th>
+                        <th>Likes</th>
+                        <th>Views</th>
+                    </tr>
                 </thead>
 
                 {% for post in value %}
                 <tbody>
                 <tr>
-                    <td>{{post.title}}</td>
+                    <td><strong>{{post.title}}</strong></td>
                     <td>{{post.content}}</td>
                     <td>{{post.likes}}</td>
                     <td>{{post.views}}</td>
@@ -143,11 +96,10 @@
         {% endif %}
     </div>
 
-
-    <footer class="container-fluid text-center">
+    <footer>
         <p>Footer Text</p>
     </footer>
 
 
-    </body>
-    </html>
+</body>
+</html>

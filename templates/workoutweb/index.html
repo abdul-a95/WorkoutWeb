@@ -51,9 +51,9 @@
 
     <div class="container">
       <div class="jumbotron" style="text-align:center">
-        <h1>Welcome</h1>
-        <p>WorkoutWeb is the most popular forum page on the web including posts on: Workout Tutorials,
-            Nutritional Meals, bla, bla, bla.</p>
+        <h1><font face="Berlin Sans FB">Welcome to Workout Web</font></h1>
+        <p><font face="Cambria">Here at Workout Web the user is the priority. We offer an open and professional environment for users
+        to share and post their tips and opinions on everything workout and fitness.</font></p>
       </div>
     </div>
 
@@ -67,14 +67,14 @@
         {% if categories %}
         <ul>
             {%  for  key,value in categories.items %}
-                    <h3><a href="{% url 'show_category' key.slug %}">{{ key.name }}</a></h3>
+                    <h3><font face="Berlin Sans FB"><a href="{% url 'show_category' key.slug %}">{{ key.name }}</a></font></h3>
             <table>
                 <thead>
                     <tr>
-                        <th>Title</th>
-                        <th>Post</th>
-                        <th>Likes</th>
-                        <th>Views</th>
+                        <th><font face="Cambria">Title</font></th>
+                        <th><font face="Cambria">Post</font></th>
+                        <th><font face="Cambria">Likes</font></th>
+                        <th><font face="Cambria">Views</font></th>
                     </tr>
                 </thead>
 
@@ -97,7 +97,7 @@
     </div>
 
     <footer>
-        <p>Footer Text</p>
+        <p>&copy; 2017 WorkoutWeb<p>
     </footer>
 
 

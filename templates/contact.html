@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+
+<head>
+  <title>Contact Us</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <h1><font face="Berlin Sans FB">Contact Us</font></h1>
+  <form id="ContactForm" method="post" action=".">
+      {% csrf_token %}
+    <div class="form-group">
+      <label for="usr">Name</label>
+      <input type="text" class="form-control" id="name" placeholder="Enter name" name="name" value="" size="50" required>
+    </div>
+    <div class="form-group">
+      <label for="pwd">Email</label>
+      <input type="email" class="form-control" id="email" placeholder="Enter email" name="email" value="" size="50" required>
+    </div>
+    <div class="form-group">
+      <label for="pwd">Message</label>
+      <input type="text" class="form-control" id="message" placeholder="Enter Message" name="message" value="" size="150" required>
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+  </form>
+</div>
+
+<div class="container">
+    <h3><font face="Berlin Sans FB">For Further Enquiries</font></h3>
+    </div>
+
+    <div class="container">
+    <strong>Ring us:</strong>
+    01413397641 </br>
+    </div>
+
+    <div class="container">
+    <strong>Send us an email:</strong>
+    help@workoutweb.com </br>
+    </div>
+
+    <div class="container">
+        <strong>Or even visit us!</strong>
+    </div>
+    <div class="container">
+        <img src="{% static "images/findus.jpg" %}"
+             alt="Our HQ" />
+    </div>
+
+    <div class="container">
+        <a href="/workoutweb/FAQ">FAQ</a></br>
+    </div>
+
+</body>
+</html>

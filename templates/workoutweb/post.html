@@ -10,8 +10,8 @@
           <ul>{{ post.content }} </ul>
           <h2>Comment Section</h2>
          {% if comments %}
-                    {% for comment in comments %}
-                        <h3>{{ comment.title }}</h3>
+                    {% for comment in post.comments.all %}
+                        <h3>{{ comment.user }}</h3>
                         <ul>{{ comment.content }} </ul>
                     {% endfor %}
          {% else %}

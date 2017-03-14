@@ -55,8 +55,8 @@ class Post(models.Model):
 
 class Comment(models.Model):
     title = models.CharField(max_length=128, default = "Comment")
-    post = models.ForeignKey(Post)
-    #user = models.ForeignKey(UserProfile)
+    post = models.ForeignKey(Post,related_name='comments')
+    user = models.ForeignKey(User,null=True)
     content = models.CharField(max_length=1024)
     def __str__(self):
         return self.title

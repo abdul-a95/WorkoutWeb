@@ -44,6 +44,8 @@ LOGIN_URL = '/accounts/login/'
 
 SITE_ID = 2
 
+AUTH_PROFILE_MODULE = "WebAppProject.UserProfile"
+
 # Application definition
 
 INSTALLED_APPS = [

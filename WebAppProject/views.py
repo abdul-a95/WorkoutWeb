@@ -27,8 +27,13 @@ def index(request):
 def about(request):
     return render(request, 'workoutweb/about.html', {})
 
+@login_required
 def account(request):
-    return render(request, 'workoutweb/account.html', {})
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/login')
+    userprofile = UserProfile.objects.filter(user_id=request.user)
+
+    return render(request, 'workoutweb/account.html', {'userprofile':userprofile})
 
 def nearestgym(request):
     return render(request, 'workoutweb/nearestgyum.html', {})
@@ -104,6 +109,7 @@ def show_post(request, post_name_slug, category_name_slug):
             if post:
                 comment = form.save(commit=False)
                 comment.post = post
+                comment.user = request.user
                 comment.save()
 
     context_dict['form'] = form

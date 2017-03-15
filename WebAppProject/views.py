@@ -13,46 +13,50 @@ from django.shortcuts import redirect
 from django.template import Context
 from django.template.loader import get_template
 
-def index(request):
-    category_list = Category.objects.order_by()[:6]
-    user = UserProfile.objects.filter(user_id=request.user.id)
-    context_dict = {}
-    context_dict['user1'] = user
-    cat_dict = {}
-    for category in category_list:
-        try:
-            posts = Post.objects.filter(category=category).order_by('-likes')[:5]
-            cat_dict[category] = posts
-        except Category.DoesNotExist:
-            cat_dict[category] = None
-    context_dict['categories'] = cat_dict
 
+
+category_list = Category.objects.order_by()[:6]
+cat_dict = {}
+for category in category_list:
+    try:
+        posts = Post.objects.filter(category=category).order_by('-likes')[:5]
+        cat_dict[category] = posts
+    except Category.DoesNotExist:
+        cat_dict[category] = None
+
+def index(request):
+    context_dict = {}
+    context_dict['categories'] = cat_dict
     return render(request,'workoutweb/index.html', context_dict)
 
 def about(request):
-    return render(request, 'workoutweb/about.html', {})
+    context_dict = {}
+    context_dict['categories'] = cat_dict
+    return render(request, 'workoutweb/about.html', context_dict)
 
 @login_required
 def account(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/login')
-    userprofile = UserProfile.objects.filter(user_id=request.user)
+    userprofile = UserProfile.objects.filter(user_id=request.user.id)
 
     return render(request, 'workoutweb/account.html', {'userprofile':userprofile})
 
 def nearestgym(request):
-    return render(request, 'workoutweb/nearestgyum.html', {})
-
-def contact(request):
-    return render(request, 'workoutweb/contact.html', {})
+    context_dict = {}
+    context_dict['categories'] = cat_dict
+    return render(request, 'workoutweb/nearest-gym.html', context_dict)
 
 def faq(request):
-    return render(request, 'workoutweb/faq.html', {})
+    context_dict = {}
+    context_dict['categories'] = cat_dict
+    return render(request, 'workoutweb/faq.html', context_dict)
 
 def show_category(request, category_name_slug):
     # Create a context dictionary which we can pass
     # to the template rendering engine.
     context_dict = {}
+    context_dict['categories'] = cat_dict
     context_dict['repeat'] = None
     try:
         category = Category.objects.get(slug=category_name_slug)
@@ -91,6 +95,7 @@ def show_post(request, post_name_slug, category_name_slug):
     # Create a context dictionary which we can pass
     # to the template rendering engine.
     context_dict = {}
+    context_dict['categories'] = cat_dict
     try:
         post = Post.objects.get(slug=post_name_slug)
         print post
@@ -114,7 +119,10 @@ def show_post(request, post_name_slug, category_name_slug):
             if post:
                 comment = form.save(commit=False)
                 comment.post = post
-                comment.user = request.user
+                if request.user.is_authenticated:
+                    comment.user = request.user
+                else:
+                    comment.user = None
                 comment.save()
 
     context_dict['form'] = form
@@ -138,11 +146,11 @@ def register(request):
             if 'picture' in request.FILES:
                 profile.picture = request.FILES['picture']
 
-                profile.save()
 
             else:
 
                 print(user_form.errors, profile_form.errors)
+            profile.save()
             registered = True
     else:
 
@@ -247,4 +255,4 @@ def contact(request):
             )
             email.send()
             return redirect('contact')
-    return render(request, 'contact.html',{'form': form_class})
+    return render(request, 'workoutweb/contact.html',{'categories': cat_dict,'form': form_class})

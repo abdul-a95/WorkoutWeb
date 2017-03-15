@@ -1,10 +1,11 @@
-  <!DOCTYPE html>
-  <html>
+{% extends 'workoutweb/base.html' %}
 
-  <head>
-      <title>Rango</title>
-  </head>
-  <body>
+{% block title_block %}
+    Categories
+{% endblock %}
+
+
+{% block body_block %}
       <div>
       {% if category %}
           <h1>{{ category.name }}</h1>
@@ -38,5 +39,4 @@
      {% endif %}
 
      </div>
- </body>
- </html>
+{%  endblock %}

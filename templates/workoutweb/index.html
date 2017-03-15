@@ -1,57 +1,18 @@
-<!DOCTYPE html>
+{% extends 'workoutweb/base.html' %}
 {% load staticfiles %}
 
-<html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Index Page</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" type="text/css" href="../static/styles.css"  media="screen" />
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-</head>
 
-<body>
+{% block title_block %}
+    Index Page
+{% endblock %}
 
 
-    <nav class="navbar navbar-inverse">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="">WorkoutWeb</a>
-        </div>
-        <ul class="nav navbar-nav">
-          <li class="active"><a href="">Home</a></li>
-          <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="">Categories <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                {%if categories %}
-                {% for category in categories %}
-                    <li><a href="{% url 'show_category' category.slug %}">{{ category.name }}</a></li>
-                {%  endfor %}
-                {% endif %}
-            </ul>
-          <li><a href="workoutweb/nearest-gym">Find Nearest Gym</a></li>
-          <li><a href="workoutweb/about">About Us</a></li>
-        <li><a href="workoutweb/contact">Contact Us</a></li>
-        <li><a href="workoutweb/faq">FAQ</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-            {% if user.is_authenticated %}
-                <li><a href="/accounts/logout/"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
-            {% else %}
-                <li><a href="/accounts/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                <li><a href="/accounts/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-            {% endif %}
-        </ul>
-      </div>
-    </nav>
+{% block body_block %}
 
 
     <div class="container">
       <div class="jumbotron" style="text-align:center">
-        <h1><font face="Berlin Sans FB">Welcome to Workout Web</font></h1>
+        <h1><font face="Berlin Sans FB">Welcome to Workout Web </font></h1>
         <p><font face="Cambria">Here at Workout Web the user is the priority. We offer an open and professional environment for users
         to share and post their tips and opinions on everything workout and fitness.</font></p>
       </div>
@@ -96,10 +57,5 @@
         {% endif %}
     </div>
 
-    <footer>
-        <p>&copy; 2017 WorkoutWeb<p>
-    </footer>
+{% endblock %}
 
-
-</body>
-</html>

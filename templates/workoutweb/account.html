@@ -1,8 +1,12 @@
-<!DOCTYPE html>
+{%  extends 'workoutweb/base.html' %}
 
-{% block content %}
-    <p>Username: {{ request.user }}</p>
-    <p>Height: {{ request.height }}</p>
-    <p>weight: {{ userprofile.weight }}</p>
+{% block title_block %}
+    Login Page
+{% endblock %}
 
+{% block body_block %}
+    <p>Username: {{ user.userprofile.user }}</p>
+    <p>Height: {{ user.userprofile.height }}</p>
+    <p>weight: {{ user.userprofile.weight }}</p>
+    <img src={{ user.userprofile.picture }}/>
 {% endblock %}

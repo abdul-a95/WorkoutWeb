@@ -1,42 +1,36 @@
 {% extends 'workoutweb/base.html' %}
 
+
+{% block title_block %}
+    Frequently Asked Questions
+{% endblock %}
+
 {%  block body_block %}
-<h1> Frequently Asked Questions </h1>
-<div class="faqs-list">
+
     <div class="container">
-        <div class="handle">
-            <span class="count">01</span>
-            <span class="question"><font face="Berlin Sans FB" size="4">What should I use WorkoutWeb for?</font></span>
-        </div>
-        <div class="answer">
-            <p>You can use WorkoutWeb for all things fitness and health! As long as you respect all other users and their
+        <h1><font face="Berlin Sans FB">Frequently Asked Questions</font></h1>
+    </div>
+
+        <section class="faq-section">
+            <input type="checkbox" id="q1">
+            <label for="q1">What should I use WorkoutWeb for?</label>
+            <p> You can use WorkoutWeb for all things fitness and health!</p>
+            <p> As long as you respect all other users and their
                 opinions, you will be able to enjoy your time as a memeber! Feel free to to comment on posts, share your opinions,
-                and get the latest tips and tricks.</p>
-        </div>
-    </div>
+                and get the latest tips and tricks.
+            </p>
+        </section>
 
-    <div>
-        <div class="container">
-            <div
-         <span class="count">02</span>
-            <span class="question"><font face="Berlin Sans FB" size="4">Why can't I see the username of the person who posted?</font></span>
-
-        <div class="answer">
-            <p>You can only see the username of the poster or commenter if you're logged into your account. If you don't have an account
-            yet, you can create one by clicking on the "sign-up" button in the top right corner.</p>
-        </div>
-    </div>
-
-        <div class="container">
-        <span class="count">02</span>
-            <span class="question"><font face="Berlin Sans FB" size="4"></font></span>
-        </div>
-        <div class="answer">
-            <p>You can only see the username of the poster or commenter if you're logged into your account. If you don't have an account
-            yet, you can create one by clicking on the "sign-up" button in the top right corner.</p>
-        </div>
-    </div>
-
+        <section class="faq-section">
+        <input type="checkbox" id="q2">
+            <label for="q2">Why can't I see the username of the person who posted?</label>
+            <p> You can only see the username of the poster or commenter
+                if you're logged into your account.
+            </p>
+            <p> If you don't have an account yet, you can create one
+                by clicking on the "sign-up" button in the top right corner.
+            </p>
+        </section>
 
 
 {% endblock %}

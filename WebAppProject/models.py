@@ -22,8 +22,6 @@ class UserProfile(models.Model):
         return self.user.username
 
 
-
-
 class Category(models.Model):
     slug = models.SlugField(unique=True)
     def save(self, *args, **kwargs):

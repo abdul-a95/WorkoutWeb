@@ -14,24 +14,23 @@ from django.template import Context
 from django.template.loader import get_template
 
 
-
-category_list = Category.objects.order_by()[:6]
-cat_dict = {}
-for category in category_list:
-    try:
-        posts = Post.objects.filter(category=category).order_by('-likes')[:5]
-        cat_dict[category] = posts
-    except Category.DoesNotExist:
-        cat_dict[category] = None
-
 def index(request):
+    category_list = Category.objects.order_by()[:6]
+    user = UserProfile.objects.filter(user_id=request.user.id)
     context_dict = {}
+    context_dict['user1'] = user
+    cat_dict = {}
+    for category in category_list:
+        try:
+            posts = Post.objects.filter(category=category).order_by('-likes')[:5]
+            cat_dict[category] = posts
+        except Category.DoesNotExist:
+            cat_dict[category] = None
     context_dict['categories'] = cat_dict
     return render(request,'workoutweb/index.html', context_dict)
 
 def about(request):
     context_dict = {}
-    context_dict['categories'] = cat_dict
     return render(request, 'workoutweb/about.html', context_dict)
 
 @login_required
@@ -40,23 +39,21 @@ def account(request):
         return HttpResponseRedirect('/login')
     userprofile = UserProfile.objects.filter(user_id=request.user.id)
 
+
     return render(request, 'workoutweb/account.html', {'userprofile':userprofile})
 
 def nearestgym(request):
     context_dict = {}
-    context_dict['categories'] = cat_dict
     return render(request, 'workoutweb/nearest-gym.html', context_dict)
 
 def faq(request):
     context_dict = {}
-    context_dict['categories'] = cat_dict
     return render(request, 'workoutweb/faq.html', context_dict)
 
 def show_category(request, category_name_slug):
     # Create a context dictionary which we can pass
     # to the template rendering engine.
     context_dict = {}
-    context_dict['categories'] = cat_dict
     context_dict['repeat'] = None
     try:
         category = Category.objects.get(slug=category_name_slug)
@@ -95,7 +92,6 @@ def show_post(request, post_name_slug, category_name_slug):
     # Create a context dictionary which we can pass
     # to the template rendering engine.
     context_dict = {}
-    context_dict['categories'] = cat_dict
     try:
         post = Post.objects.get(slug=post_name_slug)
         print post
@@ -143,15 +139,20 @@ def register(request):
             profile = profile_form.save(commit=False)
             profile.user = user
 
-            if 'picture' in request.FILES:
-                profile.picture = request.FILES['picture']
+            print request.FILES
 
-
+            if 'Picture' in request.FILES:
+                profile.picture = request.FILES['Picture']
             else:
+                print "pic not found"
 
-                print(user_form.errors, profile_form.errors)
             profile.save()
             registered = True
+
+        else:
+
+            print(user_form.errors, profile_form.errors)
+
     else:
 
         user_form = UserForm()
@@ -255,4 +256,4 @@ def contact(request):
             )
             email.send()
             return redirect('contact')
-    return render(request, 'workoutweb/contact.html',{'categories': cat_dict,'form': form_class})
+    return render(request, 'workoutweb/contact.html',{'form': form_class})

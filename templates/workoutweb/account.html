@@ -1,5 +1,6 @@
 {%  extends 'workoutweb/base.html' %}
 
+
 {% block title_block %}
     Login Page
 {% endblock %}
@@ -8,5 +9,7 @@
     <p>Username: {{ user.userprofile.user }}</p>
     <p>Height: {{ user.userprofile.height }}</p>
     <p>weight: {{ user.userprofile.weight }}</p>
-    <img src={{ user.userprofile.picture }}/>
+    {% if user.userprofile.picture %}
+        <img src="{{ MEDIA_URL }}{{ user.userprofile.picture}}" />
+    {% endif %}
 {% endblock %}

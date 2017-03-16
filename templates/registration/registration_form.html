@@ -10,7 +10,7 @@
   <h2>Register</h2>
     {% if registered %}
         <strong>Thank you for registering!</strong>
-        <a href="{% url 'index' %}">Return to the homepage.</a><br />
+        <a href="/accounts/login">please proceed to login.</a><br />
     {% else %}
       <form id="user_form" method="post" action="."
                   enctype="multipart/form-data">

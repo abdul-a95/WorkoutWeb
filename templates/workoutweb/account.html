@@ -1,15 +1,16 @@
 {%  extends 'workoutweb/base.html' %}
 
-
 {% block title_block %}
-    Login Page
+    My Account Page
 {% endblock %}
 
 {% block body_block %}
+    <div class = "profilepic">
+    {% if user.userprofile.picture %}
+        <img src="{{ MEDIA_URL }}{{ user.userprofile.picture}}"/>
+    {% endif %}
+    </div>
     <p>Username: {{ user.userprofile.user }}</p>
     <p>Height: {{ user.userprofile.height }}</p>
     <p>weight: {{ user.userprofile.weight }}</p>
-    {% if user.userprofile.picture %}
-        <img src="{{ MEDIA_URL }}{{ user.userprofile.picture}}" />
-    {% endif %}
 {% endblock %}

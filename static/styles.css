@@ -10,6 +10,10 @@ body{
     min-height:100%;
 }
 
+h1{
+	font-family:"Berlin Sans FB"
+}
+
 .topcorner {
     position:absolute;
     top:10%;

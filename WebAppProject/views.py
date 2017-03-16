@@ -7,6 +7,12 @@ from WebAppProject.forms import UserForm,UserProfileForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from WebAppProject.forms import ContactForm
+from django.core.mail import EmailMessage
+from django.shortcuts import redirect
+from django.template import Context
+from django.template.loader import get_template
+
 
 def index(request):
     category_list = Category.objects.order_by()[:6]
@@ -21,23 +27,28 @@ def index(request):
         except Category.DoesNotExist:
             cat_dict[category] = None
     context_dict['categories'] = cat_dict
-
     return render(request,'workoutweb/index.html', context_dict)
 
 def about(request):
-    return render(request, 'workoutweb/about.html', {})
+    context_dict = {}
+    return render(request, 'workoutweb/about.html', context_dict)
 
+@login_required
 def account(request):
-    return render(request, 'workoutweb/account.html', {})
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/login')
+    userprofile = UserProfile.objects.filter(user_id=request.user.id)
+
+
+    return render(request, 'workoutweb/account.html', {'userprofile':userprofile})
 
 def nearestgym(request):
-    return render(request, 'workoutweb/nearestgyum.html', {})
-
-def contact(request):
-    return render(request, 'workoutweb/contact.html', {})
+    context_dict = {}
+    return render(request, 'workoutweb/nearest-gym.html', context_dict)
 
 def faq(request):
-    return render(request, 'workoutweb/faq.html', {})
+    context_dict = {}
+    return render(request, 'workoutweb/faq.html', context_dict)
 
 def show_category(request, category_name_slug):
     # Create a context dictionary which we can pass
@@ -104,6 +115,10 @@ def show_post(request, post_name_slug, category_name_slug):
             if post:
                 comment = form.save(commit=False)
                 comment.post = post
+                if request.user.is_authenticated:
+                    comment.user = request.user
+                else:
+                    comment.user = None
                 comment.save()
 
     context_dict['form'] = form
@@ -124,15 +139,20 @@ def register(request):
             profile = profile_form.save(commit=False)
             profile.user = user
 
-            if 'picture' in request.FILES:
-                profile.picture = request.FILES['picture']
+            print request.FILES
 
-                profile.save()
-
+            if 'Picture' in request.FILES:
+                profile.picture = request.FILES['Picture']
             else:
+                print "pic not found"
 
-                print(user_form.errors, profile_form.errors)
+            profile.save()
             registered = True
+
+        else:
+
+            print(user_form.errors, profile_form.errors)
+
     else:
 
         user_form = UserForm()
@@ -201,3 +221,39 @@ def user_logout(request):
     logout(request)
     # Take the user back to the homepage.
     return HttpResponseRedirect(reverse('index'))
+
+def contact(request):
+    form_class = ContactForm
+    if request.method == 'POST':
+        form = form_class(data=request.POST)
+
+        if form.is_valid():
+            contact_name = request.POST.get(
+                'contact_name'
+                , '')
+            contact_email = request.POST.get(
+                'contact_email'
+                , '')
+            form_content = request.POST.get('content', '')
+
+            # Email the profile with the
+            # contact information
+            template =\
+                get_template('contact_template.txt')
+            context = Context({
+                'contact_name': contact_name,
+                'contact_email': contact_email,
+                'form_content': form_content,
+            })
+            content = template.render(context)
+
+            email = EmailMessage(
+                "New contact form submission",
+                content,
+                "Workout Web" + '',
+                ['milsnorton@hotmail.com'],
+                headers={'Reply-To': contact_email}
+            )
+            email.send()
+            return redirect('contact')
+    return render(request, 'workoutweb/contact.html',{'form': form_class})

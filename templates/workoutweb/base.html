@@ -1,31 +1,60 @@
 <!DOCTYPE html>
+{% load workoutweb_template_tags %}
+{%  load staticfiles %}
+
 <html>
 <head>
     <meta charset="utf-8">
-    <title>My bootstrap</title>
+    <title>WorkoutWeb</title>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{% static "styles.css" %}"  media="screen" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
 </head>
 <body>
-
-    <div class="container">
-        <h1><a href="#">Bootstrap Site</a></h1>
-        <div class="navbar navbar-default">
-            <div class="navbar-inner">
-                <div class="container">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Home</a></li>
-                        <li><a href="#">Projects</a></li>
-                        <li><a href="#">Services</a></li>
-                        <li><a href="#">Downloads</a></li>
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Contact</a></li>
-                    </ul>
-                </div>
-            </div>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="">WorkoutWeb</a>
         </div>
+        <ul class="nav navbar-nav">
+            <li><a href="/workoutweb/">Home</a></li>
+            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="">Categories <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    {% get_category_list %}
+                </ul>
+            <li><a href="{% url 'nearest gym' %}">Find Nearest Gym</a></li>
+            <li><a href="{% url 'about' %}">About Us</a></li>
+            <li><a href="{% url 'contact' %}">Contact Us</a></li>
+            <li><a href="{% url 'faq' %}">FAQ</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'account' %}">My Account</a></li>
+                <li><a href="/accounts/logout/"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 
-
+            {% else %}
+                <li><a href="/accounts/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                <li><a href="/accounts/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            {% endif %}
+        </ul>
     </div>
+</nav>
+
+
+    <div>
+        {% block body_block %}
+        {% endblock %}
+    </div>
+
+    <footer>
+        <p>&copy; 2017 WorkoutWeb<p>
+    </footer>
 
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script src="js/bootstrap.js"></script>

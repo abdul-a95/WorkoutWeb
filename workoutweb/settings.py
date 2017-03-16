@@ -44,6 +44,8 @@ LOGIN_URL = '/accounts/login/'
 
 SITE_ID = 2
 
+AUTH_PROFILE_MODULE = "WebAppProject.UserProfile"
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -100,6 +102,12 @@ DATABASES = {
     }
 }
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'testing@example.com'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = False
+EMAIL_PORT = 1025
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators

@@ -279,10 +279,15 @@ def account_settings(request):
     form = UserProfileForm(request.POST or None, initial={'bio':user.bio,'height':user.height,'weight':user.weight})
     if request.method == 'POST':
         if form.is_valid():
-
-            user.bio = request.POST['bio']
-            user.height = request.POST['height']
-            user.weight = request.POST['weight']
+            if request.POST['bio']:
+                user.bio = request.POST['bio']
+                user.save()
+            elif request.POST['height']:
+                user.height = request.POST['height']
+                user.save()
+            elif request.POST['weight']:
+                user.weight = request.POST['weight']
+                user.save()
 
             if 'Picture' in request.FILES:
                 user.picture = request.FILES['Picture']

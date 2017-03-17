@@ -91,9 +91,13 @@ def show_category(request, category_name_slug):
 def show_post(request, post_name_slug, category_name_slug):
     # Create a context dictionary which we can pass
     # to the template rendering engine.
+    post = Post.objects.get(slug=post_name_slug)
     context_dict = {}
-    if request.method == 'LIKE':
-        context_dict['liked'] = True
+    for userlike in post.userliked.all():
+        if userlike == request.user:
+            context_dict['liked'] = True
+    #  if request.user in post.userliked:
+       # context_dict['liked'] = True
     try:
         post = Post.objects.get(slug=post_name_slug)
         comments = Comment.objects.filter(post=post)
@@ -132,6 +136,7 @@ def liked(request,post_name_slug,category_name_slug):
     post = Post.objects.get(slug=post_name_slug)
     post.likes = post.likes + 1
     post.save()
+    post.userliked.add(request.user.id)
     request.method = 'LIKE'
     return show_post(request,post_name_slug,category_name_slug)
 

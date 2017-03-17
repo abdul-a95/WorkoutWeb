@@ -1,5 +1,37 @@
 {% extends 'workoutweb/base.html' %}
+{% load staticfiles %}
 
 {%  block body_block %}
-<h1> WASSUP </h1>
+<div class="container">
+<h1><font face="Berlin Sans FB">About Us</font></h1>
+    </div>
+<div class="container">
+    We are the creators of WorkoutWeb! A forum that revolves around all things fitness and workout, WorkoutWeb is targeted towards anyone
+    interested in sharing their hints, tips and progress.
+    </br>
+    As well as, those who are wanting to improve their fitness or lose weight.
+    The aim of WorkoutWeb is to provide a place for anyone to access information on other
+    users’ inspiration and workout styles, simply a place for users to show off how much they
+    can deadlift or for users to just ask questions or follow fitness threads.
+    </br>
+    Our team is made up of 4 members all studying Computer Science at the university of glasgow.
+    </br>
+    <strong>First up we have Abdul Ashraf, from Glasgow.</strong>
+    <img src="{% static "images/abdul.jpg" %}"
+         alt="Abdul" />
+    </br>
+    <strong>Secondly Jaskaran Bansal, from London.</strong>
+    <img src="{% static "images/jaskaran.jpg" %}"
+         alt="Jaskaran" />
+    </br>
+    <strong>Third up is Millie Norton, from London.</strong>
+    <img src="{% static "images/millie.jpg" %}"
+         alt="Millie" />
+    </br>
+    <strong>And the CSS King Himself Naji Shehab, from Glasgow.</strong>
+    <img src="{% static "images/naji.jpg" %}"
+         alt="Naji" />
+</div>
 {% endblock %}
+
+

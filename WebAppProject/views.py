@@ -92,12 +92,15 @@ def show_post(request, post_name_slug, category_name_slug):
     # Create a context dictionary which we can pass
     # to the template rendering engine.
     context_dict = {}
+    if request.method == 'LIKE':
+        context_dict['liked'] = True
     try:
         post = Post.objects.get(slug=post_name_slug)
-        print post
         comments = Comment.objects.filter(post=post)
         context_dict['post'] = post
         context_dict['comments'] = comments
+        post.views = post.views + 1
+        post.save()
     except Post.DoesNotExist:
         context_dict['post'] = None
         context_dict['comments'] = None
@@ -123,6 +126,14 @@ def show_post(request, post_name_slug, category_name_slug):
 
     context_dict['form'] = form
     return render(request, 'workoutweb/post.html', context_dict)
+
+
+def liked(request,post_name_slug,category_name_slug):
+    post = Post.objects.get(slug=post_name_slug)
+    post.likes = post.likes + 1
+    post.save()
+    request.method = 'LIKE'
+    return show_post(request,post_name_slug,category_name_slug)
 
 def register(request):
     registered = False

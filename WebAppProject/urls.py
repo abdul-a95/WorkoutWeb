@@ -13,4 +13,6 @@ urlpatterns = [
         views.show_category, name='show_category'),
     url(r'^category/(?P<category_name_slug>[\w\-]+)/(?P<post_name_slug>[\w\-]+)/$',
         views.show_post, name='show_post'),
+    url(r'^category/(?P<category_name_slug>[\w\-]+)/(?P<post_name_slug>[\w\-]+)/liked/$',
+        views.liked, name='liked'),
 ]

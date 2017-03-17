@@ -9,6 +9,8 @@
       <div>
       {% if category %}
           <h1>{{ category.name }}</h1>
+          {% if user.is_authenticated %}
+      {% endif %}
          {% if posts %}
                     {% for post in posts %}
                         <h2><a href="{% url 'show_post' category.slug post.slug %}">{{ post.title }}</a></h2>

@@ -4,8 +4,18 @@
 {%  block body_block %}
       <div>
       {% if post %}
+          {% if liked %}
+            <b>Post has been liked! Thanks for your feedback!!</b>
+          {% endif %}
           <h1>{{ post.title }}</h1>
           <ul>{{ post.content }} </ul>
+          {% if liked %}
+          {% else %}
+          <form action="/workoutweb/category/{{ post.category.slug }}/{{ post.slug }}/liked/" method="post">
+            {% csrf_token %}
+          <button type="submit" value="preview" name="Preview">Like</button>
+          {% endif %}
+        </form>
           <h2>Comment Section</h2>
          {% if comments %}
                     {% for comment in post.comments.all %}

@@ -155,12 +155,10 @@ def register(request):
             profile = profile_form.save(commit=False)
             profile.user = user
 
-            print request.FILES
 
             if 'Picture' in request.FILES:
                 profile.picture = request.FILES['Picture']
-            else:
-                print "pic not found"
+
 
             profile.save()
             registered = True
@@ -273,3 +271,24 @@ def contact(request):
             email.send()
             return redirect('contact')
     return render(request, 'workoutweb/contact.html',{'form': form_class})
+
+
+@login_required
+def account_settings(request):
+    user = UserProfile.objects.get(user_id=request.user.id)
+    form = UserProfileForm(request.POST or None, initial={'bio':user.bio,'height':user.height,'weight':user.weight})
+    if request.method == 'POST':
+        if form.is_valid():
+
+            user.bio = request.POST['bio']
+            user.height = request.POST['height']
+            user.weight = request.POST['weight']
+
+            if 'Picture' in request.FILES:
+                user.picture = request.FILES['Picture']
+
+            user.save()
+            return HttpResponseRedirect('%s'%(reverse('account')))
+
+
+    return render(request, 'workoutweb/account_settings.html', {'form':form})

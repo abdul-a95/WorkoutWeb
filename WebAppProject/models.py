@@ -10,13 +10,13 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
-
 class UserProfile(models.Model):
     # links UserProfile to a user model instance
     user = models.OneToOneField(User,on_delete=models.CASCADE)
     height = models.IntegerField(default=0,blank=True)
     weight = models.IntegerField(default=0,blank=True)
     picture = models.ImageField(upload_to='profile_images',blank=True)
+    bio = models.CharField(max_length=250, default="hey there")
 
     def __str__(self):
         return self.user.username

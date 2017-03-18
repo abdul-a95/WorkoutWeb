@@ -2,24 +2,66 @@
 
 
 {%  block body_block %}
-      <div>
-      {% if post %}
-          {% if liked %}
-            <b>Post has been liked! Thanks for your feedback!!</b>
-          {% endif %}
-          <h1>{{ post.title }}</h1>
-          <ul>{{ post.content }} </ul>
-          {% if liked %}
-          {% else %}
-            {% if user.is_authenticated %}
-              <form action="/workoutweb/category/{{ post.category.slug }}/{{ post.slug }}/liked/" method="post">
-                {% csrf_token %}
-              <button type="submit" value="preview" name="Preview">Like</button>
-            {% endif %}
-          {% endif %}
-        </form>
-          <h2>Comment Section</h2>
-         {% if comments %}
+    <!-- Page Content -->
+    <div class="container">
+
+        <div class="row">
+
+            <!-- Blog Post Content Column -->
+            <div class="col-lg-8">
+
+                <!-- Blog Post -->
+
+                {% if post %}
+                      {% if liked %}
+                        <b>Post has been liked! Thanks for your feedback!!</b>
+                      {% endif %}
+                      <h1>{{ post.title }}</h1>
+
+                <!-- Author -->
+                <p class="lead">
+                    by <small>USERNAME PUT HERE</small></a>
+                </p>
+
+                <!-- Date/Time -->
+                <p><span class="glyphicon glyphicon-time"></span> Posted on August 24, 2013 at 9:00 PM</p>
+
+                <hr>
+
+                <!-- Post Content -->
+                <div class="lead">
+                    <ul>{{ post.content }} </ul>
+                </div>
+
+
+                {% if liked %}
+                {% else %}
+                {% if user.is_authenticated %}
+                     <form action="/workoutweb/category/{{ post.category.slug }}/{{ post.slug }}/liked/" method="post">
+                     {% csrf_token %}
+                    <button type="submit" value="preview" name="Preview">Like</button>
+                    {% endif %}
+                {% endif %}
+                </form>
+
+
+                <!-- Blog Comments -->
+
+                <!-- Comments Form -->
+                    <div class="well">
+                        <h4>Leave a Comment:</h4>
+                        <form id="comment_form" method="post" action="/workoutweb/category/{{ post.category.slug }}/{{ post.slug }}/">
+                                {% csrf_token %}
+                            <div class="form-group">
+                                <textarea class="form-control" rows="3" name="submit" value="Create Comment" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+
+            <div>
+                <h2>Comment Section</h2>
+                {% if comments %}
                     {% for comment in post.comments.all %}
                         {% if comment.user %}
                             <h3>{{ comment.user }}</h3>
@@ -28,25 +70,31 @@
                         {% endif %}
                         <ul>{{ comment.content }} </ul>
                     {% endfor %}
-         {% else %}
-             <strong>No comments, be the first to reply!</strong>
-         {% endif %}
-          <form id="comment_form" method="post" action="/workoutweb/category/{{ post.category.slug }}/{{ post.slug }}/">
-                {% csrf_token %}
-                {% for hidden in form.hidden_fields %}
-                    {{ hidden }}
-                {% endfor %}
-                {% for field in form.visible_fields %}
-                    {{ field.errors }}
-                    {{ field.help_text }}
-                    {{ field }}
-                {% endfor %}
-               <input type="submit" name="submit" value="Create Comment" />
-          </form>
+                {% else %}
+                    <strong>No comments, be the first to reply!</strong>
+                {% endif %}
+            </div>
 
-     {% else %}
-         The specified post does not exist!
-     {% endif %}
-     </div>
+                <!-- Comment -->
+                <div class="media">
+                    <a class="pull-left">
+                        <img class="media-object" src="http://placehold.it/64x64" alt="">
+                    </a>
+                    <div class="media-body">
+                        <h4 class="media-heading">USERNAME HERE
+                            <small>August 25, 2014 at 9:30 PM</small>
+                        </h4>
+                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+                    </div>
+                </div>
+
+
+                {% else %}
+                    The specified post does not exist!
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
 
 {% endblock %}

@@ -6,39 +6,52 @@
 
 
 {% block body_block %}
-      <div>
-      {% if category %}
-          <h1>{{ category.name }}</h1>
-          {% if user.is_authenticated %}
-      {% endif %}
-         {% if posts %}
-                    {% for post in posts %}
-                        <h2><a href="{% url 'show_post' category.slug post.slug %}">{{ post.title }}</a></h2>
-                        <ul>{{ post.content }} </ul>
-                        <ul><b>likes:</b>{{post.likes}} <b>views:</b>{{post.views}}</ul>
-                    {% endfor %}
-         {% else %}
-             <strong>No posts currently in category.</strong>
-         {% endif %}
-          {% if repeat %}
-                <b><font size="3" color="red">This post title already exists!</font></b>
-          {% endif %}
+    <!-- Page Content -->
+    <div class="container">
 
-          <form id="post_form" method="post" action="/workoutweb/category/{{ category.slug }}/">
-                {% csrf_token %}
-                {% for hidden in form.hidden_fields %}
-                    {{ hidden }}
-                {% endfor %}
-                {% for field in form.visible_fields %}
-                    {{ field.errors }}
-                    {{ field.help_text }}
-                    {{ field }}
-                {% endfor %}
-               <input type="submit" name="submit" value="Create Post" />
-          </form>
-     {% else %}
-         The specified category does not exist!
-     {% endif %}
+        <div class="row">
 
-     </div>
+            <!-- Blog Entries Column -->
+            <div class="col-md-10">
+
+                <h1 class="page-header">
+                    {% if category %}
+                        {{ category.name }}
+                        {% if user.is_authenticated %}
+                        {% endif %}
+                    <small>Posts:</small>
+                </h1>
+
+                 {% if posts %}
+                            {% for post in posts %}
+                                <h2><a href="{% url 'show_post' category.slug post.slug %}">{{ post.title }}</a></h2>
+                                <ul>{{ post.content }} </ul>
+                                <ul><b>likes:</b>{{post.likes}} <b>views:</b>{{post.views}}</ul>
+                            {% endfor %}
+                 {% else %}
+                     <strong>No posts currently in category.</strong>
+                 {% endif %}
+                 {% if repeat %}
+                        <b><font size="3" color="red">This post title already exists!</font></b>
+                 {% endif %}
+                        <form id="post_form" method="post" action="/workoutweb/category/{{ category.slug }}/">
+                        {% csrf_token %}
+                        {% for hidden in form.hidden_fields %}
+                            {{ hidden }}
+                        {% endfor %}
+                        {% for field in form.visible_fields %}
+                            {{ field.errors }}
+                            {{ field.help_text }}
+                            {{ field }}
+                        {% endfor %}
+                       <input type="submit" name="submit" value="Create Post" />
+                        </form>
+
+             {% else %}
+                 The specified category does not exist!
+             {% endif %}
+
+            </div>
+        </div>
+    </div>
 {%  endblock %}

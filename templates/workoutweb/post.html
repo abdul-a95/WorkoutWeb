@@ -11,9 +11,11 @@
           <ul>{{ post.content }} </ul>
           {% if liked %}
           {% else %}
-          <form action="/workoutweb/category/{{ post.category.slug }}/{{ post.slug }}/liked/" method="post">
-            {% csrf_token %}
-          <button type="submit" value="preview" name="Preview">Like</button>
+            {% if user.is_authenticated %}
+              <form action="/workoutweb/category/{{ post.category.slug }}/{{ post.slug }}/liked/" method="post">
+                {% csrf_token %}
+              <button type="submit" value="preview" name="Preview">Like</button>
+            {% endif %}
           {% endif %}
         </form>
           <h2>Comment Section</h2>

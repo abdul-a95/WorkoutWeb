@@ -1,4 +1,6 @@
 {%  extends 'workoutweb/base.html' %}
+{% load staticfiles %}
+
 
 {% block title_block %}
     My Account Page
@@ -8,9 +10,15 @@
     <div class = "profilepic">
     {% if user.userprofile.picture %}
         <img src="{{ MEDIA_URL }}{{ user.userprofile.picture}}"/>
+    {% else %}
+        <img src="{% static 'images/default-profile.jpg' %}"/>
     {% endif %}
     </div>
-    <p>Username: {{ user.userprofile.user }}</p>
+    <h1><p>Username: {{ user.userprofile.user }}</p></h1>
+    <p>Bio: {{ user.userprofile.bio }}</p>
     <p>Height: {{ user.userprofile.height }}</p>
     <p>weight: {{ user.userprofile.weight }}</p>
+
+     <strong>click here to update your profile page</strong>
+    <a href="/workoutweb/account_settings">Account Settings</a></br>
 {% endblock %}

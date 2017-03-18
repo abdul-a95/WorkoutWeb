@@ -91,9 +91,13 @@ def show_category(request, category_name_slug):
 def show_post(request, post_name_slug, category_name_slug):
     # Create a context dictionary which we can pass
     # to the template rendering engine.
+    post = Post.objects.get(slug=post_name_slug)
     context_dict = {}
-    if request.method == 'LIKE':
-        context_dict['liked'] = True
+    for userlike in post.userliked.all():
+        if userlike == request.user:
+            context_dict['liked'] = True
+    #  if request.user in post.userliked:
+       # context_dict['liked'] = True
     try:
         post = Post.objects.get(slug=post_name_slug)
         comments = Comment.objects.filter(post=post)
@@ -132,6 +136,7 @@ def liked(request,post_name_slug,category_name_slug):
     post = Post.objects.get(slug=post_name_slug)
     post.likes = post.likes + 1
     post.save()
+    post.userliked.add(request.user.id)
     request.method = 'LIKE'
     return show_post(request,post_name_slug,category_name_slug)
 
@@ -150,12 +155,10 @@ def register(request):
             profile = profile_form.save(commit=False)
             profile.user = user
 
-            print request.FILES
 
             if 'Picture' in request.FILES:
                 profile.picture = request.FILES['Picture']
-            else:
-                print "pic not found"
+
 
             profile.save()
             registered = True
@@ -268,3 +271,29 @@ def contact(request):
             email.send()
             return redirect('contact')
     return render(request, 'workoutweb/contact.html',{'form': form_class})
+
+
+@login_required
+def account_settings(request):
+    user = UserProfile.objects.get(user_id=request.user.id)
+    form = UserProfileForm(request.POST or None, initial={'bio':user.bio,'height':user.height,'weight':user.weight})
+    if request.method == 'POST':
+        if form.is_valid():
+            if request.POST['bio']:
+                user.bio = request.POST['bio']
+                user.save()
+            elif request.POST['height']:
+                user.height = request.POST['height']
+                user.save()
+            elif request.POST['weight']:
+                user.weight = request.POST['weight']
+                user.save()
+
+            if 'Picture' in request.FILES:
+                user.picture = request.FILES['Picture']
+
+            user.save()
+            return HttpResponseRedirect('%s'%(reverse('account')))
+
+
+    return render(request, 'workoutweb/account_settings.html', {'form':form})

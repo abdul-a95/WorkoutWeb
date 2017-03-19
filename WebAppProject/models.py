@@ -46,14 +46,16 @@ class Post(models.Model):
     likes = models.IntegerField(default=0)
     views = models.IntegerField(default=0)
     content = models.CharField(max_length=1024, default = "")
+    user = models.CharField(max_length=128, default="")
     userliked = models.ManyToManyField(User)
+    time = models.CharField(default='', max_length=128)
 
     def __str__(self):
         return self.title
 
 
 class Comment(models.Model):
-    title = models.CharField(max_length=128, default = "Comment")
+    time = models.CharField(default = '', max_length=128)
     post = models.ForeignKey(Post,related_name='comments')
     user = models.ForeignKey(User,null=True)
     content = models.CharField(max_length=1024)

@@ -20,11 +20,11 @@
 
                 <!-- Author -->
                 <p class="lead">
-                    by <small>USERNAME PUT HERE</small></a>
+                    by <small>{{post.user}}</small></a>
                 </p>
 
                 <!-- Date/Time -->
-                <p><span class="glyphicon glyphicon-time"></span> Posted on August 24, 2013 at 9:00 PM</p>
+                <p><span class="glyphicon glyphicon-time"></span> {{ post.time }}</p>
 
                 <hr>
 
@@ -53,7 +53,7 @@
                         <form id="comment_form" method="post" action="/workoutweb/category/{{ post.category.slug }}/{{ post.slug }}/">
                                 {% csrf_token %}
                             <div class="form-group">
-                                <textarea class="form-control" rows="3" name="submit" value="Create Comment" required></textarea>
+                                <textarea class="form-control" form="comment_form" rows="3" name="content" value="Create Comment" required></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
@@ -64,29 +64,37 @@
                 {% if comments %}
                     {% for comment in post.comments.all %}
                         {% if comment.user %}
-                            <h3>{{ comment.user }}</h3>
+                            <div class="media">
+                                 <a class="pull-left">
+                                    <img class="media-object" src="http://placehold.it/64x64" alt="">
+                                </a>
+
+                                <div class="media-body">
+                                    <h4 class="media-heading">{{ comment.user }}
+                                        <small><span class="glyphicon glyphicon-time"></span>{{ comment.time }}</small>
+                                    </h4>
+                                    <p>{{ comment.content }} </p>
+                                    </div>
+                            </div>
                         {% else %}
-                            <h3>Anonymous</h3>
+                            <div class="media">
+                                 <a class="pull-left">
+                                    <img class="media-object" src="http://placehold.it/64x64" alt="">
+                                </a>
+
+                                <div class="media-body">
+                                    <h4 class="media-heading"> RANDOM USER
+                                        <small><span class="glyphicon glyphicon-time"></span>August 25, 2014 at 9:30 PM</small>
+                                    </h4>
+                                    <ul>{{ comment.content }} </ul>
+                                    </div>
+                            </div>
                         {% endif %}
-                        <ul>{{ comment.content }} </ul>
                     {% endfor %}
                 {% else %}
                     <strong>No comments, be the first to reply!</strong>
                 {% endif %}
             </div>
-
-                <!-- Comment -->
-                <div class="media">
-                    <a class="pull-left">
-                        <img class="media-object" src="http://placehold.it/64x64" alt="">
-                    </a>
-                    <div class="media-body">
-                        <h4 class="media-heading">USERNAME HERE
-                            <small>August 25, 2014 at 9:30 PM</small>
-                        </h4>
-                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-                    </div>
-                </div>
 
 
                 {% else %}

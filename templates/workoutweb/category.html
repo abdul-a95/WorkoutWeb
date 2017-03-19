@@ -34,18 +34,20 @@
                  {% if repeat %}
                         <b><font size="3" color="red">This post title already exists!</font></b>
                  {% endif %}
-                        <form id="post_form" method="post" action="/workoutweb/category/{{ category.slug }}/">
-                        {% csrf_token %}
-                        {% for hidden in form.hidden_fields %}
-                            {{ hidden }}
-                        {% endfor %}
-                        {% for field in form.visible_fields %}
-                            {{ field.errors }}
-                            {{ field.help_text }}
-                            {{ field }}
-                        {% endfor %}
-                       <input type="submit" name="submit" value="Create Post" />
-                        </form>
+
+                    <h3>Post information</h3>
+                    <form id="post_form" method="post" action="/workoutweb/category/{{ category.slug }}/">
+                        <div>
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="title">Title:</label>
+                                <input type="text" class="form-control" form="post_form" id="title" placeholder="Enter title" name="title" value="" size="50" required>
+                                <textarea class="form-control" form="post_form" rows="3" name="content" value="Post content" required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
 
              {% else %}
                  The specified category does not exist!

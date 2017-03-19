@@ -12,7 +12,7 @@ from django.core.mail import EmailMessage
 from django.shortcuts import redirect
 from django.template import Context
 from django.template.loader import get_template
-
+import datetime
 
 def index(request):
     category_list = Category.objects.order_by()[:6]
@@ -78,6 +78,9 @@ def show_category(request, category_name_slug):
                 try:
                     post = form.save(commit=False)
                     post.category = category
+                    post.user = request.user.username
+                    now = datetime.datetime.now()
+                    post.time = now.strftime('Posted On ' '%B ''%d'', ''%Y '' at ''%I'':''%M'' %p')
                     post.save()
                     context_dict['repeat'] = None
                 except:
@@ -122,6 +125,8 @@ def show_post(request, post_name_slug, category_name_slug):
             if post:
                 comment = form.save(commit=False)
                 comment.post = post
+                now = datetime.datetime.now()
+                comment.time = now.strftime('%B ''%d'', ''%Y '' at ''%I'':''%M'' %p')
                 if request.user.is_authenticated:
                     comment.user = request.user
                 else:

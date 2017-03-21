@@ -13,6 +13,9 @@ from django.shortcuts import redirect
 from django.template import Context
 from django.template.loader import get_template
 import datetime
+from random import randint
+import string
+
 
 def index(request):
     category_list = Category.objects.order_by()[:6]
@@ -87,8 +90,16 @@ def show_category(request, category_name_slug):
                     post.user = request.user.username
                     now = datetime.datetime.now()
                     post.time = now.strftime('Posted On ' '%B ''%d'', ''%Y '' at ''%I'':''%M'' %p')
-                    post.save()
-                    context_dict['repeat'] = None
+                    letters = False
+                    for n in post.title:
+                        print n
+                        if n in string.ascii_letters:
+                            letters = True
+                    if letters:
+                        post.save()
+                        context_dict['repeat'] = None
+                    else:
+                        context_dict['repeat'] = 'Please involve letters in your title'
                 except:
                     context_dict['repeat'] = 'Post title exists.'
         else:
@@ -100,15 +111,14 @@ def show_category(request, category_name_slug):
 def show_post(request, post_name_slug, category_name_slug):
     # Create a context dictionary which we can pass
     # to the template rendering engine.
-    post = Post.objects.get(slug=post_name_slug)
     context_dict = {}
-    for userlike in post.userliked.all():
-        if userlike == request.user:
-            context_dict['liked'] = True
     #  if request.user in post.userliked:
        # context_dict['liked'] = True
     try:
         post = Post.objects.get(slug=post_name_slug)
+        for userlike in post.userliked.all():
+            if userlike == request.user:
+                context_dict['liked'] = True
         comments = Comment.objects.filter(post=post)
         context_dict['post'] = post
         context_dict['comments'] = comments
@@ -136,7 +146,9 @@ def show_post(request, post_name_slug, category_name_slug):
                 if request.user.is_authenticated:
                     comment.user = request.user
                 else:
+                    guestnum = (randint(0, 1000))
                     comment.user = None
+                    comment.username = "Guest"+str(guestnum)
                 comment.save()
 
     context_dict['form'] = form
@@ -153,6 +165,7 @@ def liked(request,post_name_slug,category_name_slug):
 
 def register(request):
     registered = False
+    context_dict = {}
     if request.method == 'POST':
         user_form = UserForm(data=request.POST)
         profile_form = UserProfileForm(data=request.POST)
@@ -175,17 +188,17 @@ def register(request):
             registered = True
 
         else:
-
+            context_dict['error'] = "Invalid Form Entry. Please try again."
             print(user_form.errors, profile_form.errors)
     else:
 
 
         user_form = UserForm()
         profile_form = UserProfileForm()
-
-    return render(request,'registration/registration_form.html',{'user_form': user_form,
-                                                          'profile_form': profile_form,
-                                                          'registered': registered})
+    context_dict['user_form'] = user_form
+    context_dict['profile_form'] = profile_form
+    context_dict['registered'] = registered
+    return render(request,'registration/registration_form.html',context_dict)
 
 
 def user_login(request):

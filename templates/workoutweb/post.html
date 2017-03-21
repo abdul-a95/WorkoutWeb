@@ -41,8 +41,8 @@
                      {% csrf_token %}
                     <button type="submit" value="preview" name="Preview">Like</button>
                     {% endif %}
-                {% endif %}
                 </form>
+                {% endif %}
 
 
                 <!-- Blog Comments -->
@@ -83,7 +83,7 @@
                                 </a>
 
                                 <div class="media-body">
-                                    <h4 class="media-heading"> RANDOM USER
+                                    <h4 class="media-heading"> {{comment.username}}
                                         <small><span class="glyphicon glyphicon-time"></span>{{ comment.time }}</small>
                                     </h4>
                                     <ul>{{ comment.content }} </ul>
@@ -94,10 +94,8 @@
                 {% else %}
                     <strong>No comments, be the first to reply!</strong>
                 {% endif %}
+
             </div>
-                {% else %}
-                    The specified post does not exist!
-                {% endif %}
 
             </div>
 
@@ -112,11 +110,16 @@
                     </div>
                 </div>
             </div>
-
-            <form><INPUT Type="button" VALUE="Back" onClick="history.go(-1);return true;"></form>
+            {%if liked%}
+                <button><a href="/workoutweb/category/{{ post.category.slug }}/">Back</a></button>
+            {%else%}
+                <form><INPUT Type="button" VALUE="Back" onClick="location.href = document.referrer; return true;"></form>
+            {%endif%}
             </div>
         </div>
     </div>
-
+{% else %}
+    The specified category does not exist!
+{% endif %}
 
 {% endblock %}

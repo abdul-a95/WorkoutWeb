@@ -13,6 +13,9 @@
                 <strong>Thank you for registering!</strong>
                 <a href="/accounts/login">please proceed to login.</a><br />
             {% else %}
+                {% if error %}
+                     <b><font size="3" color="red">{{ error }}</font></b>
+                {% endif %}
                 <form id="user_form" method="post" action="."
                           enctype="multipart/form-data">
                     {% csrf_token %}

@@ -43,9 +43,10 @@
 
                         <!-- Checks if a post is same title -->
                         {% if repeat %}
-                            <b><font size="3" color="red">This post title already exists!</font></b>
+                            <b><font size="3" color="red">{{ repeat }}</font></b>
                         {% endif %}
                         <!--Creating a new post-->
+                        {% if user.is_authenticated %}
                         <h3>Post information</h3>
                         <form id="post_form" method="post" action="/workoutweb/category/{{ category.slug }}/">
                             <div>
@@ -59,6 +60,7 @@
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </div>
                         </form>
+                        {% endif %}
                     {% else %}
                         The specified category does not exist!
                     {% endif %}

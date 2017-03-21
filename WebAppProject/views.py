@@ -39,12 +39,18 @@ def account(request):
         return HttpResponseRedirect('/login')
     userprofile = UserProfile.objects.filter(user_id=request.user.id)
 
+    error = None
+    try:
+        post = Post.objects.filter(userliked=request.user)
+    except Post.DoesNotExist:
+        post = None
+        error = "you haven't liked anything"
 
-    return render(request, 'workoutweb/account.html', {'userprofile':userprofile})
+    return render(request, 'workoutweb/account.html', {'userprofile':userprofile,'post':post})
 
 def nearestgym(request):
     context_dict = {}
-    return render(request, 'workoutweb/nearest-gym.html', context_dict)
+    return render(request, 'workoutweb/nearest_gym.html', context_dict)
 
 def faq(request):
     context_dict = {}
@@ -96,7 +102,6 @@ def show_post(request, post_name_slug, category_name_slug):
     # to the template rendering engine.
     post = Post.objects.get(slug=post_name_slug)
     context_dict = {}
-
     for userlike in post.userliked.all():
         if userlike == request.user:
             context_dict['liked'] = True
@@ -172,8 +177,8 @@ def register(request):
         else:
 
             print(user_form.errors, profile_form.errors)
-
     else:
+
 
         user_form = UserForm()
         profile_form = UserProfileForm()
@@ -288,10 +293,10 @@ def account_settings(request):
             if request.POST['bio']:
                 user.bio = request.POST['bio']
                 user.save()
-            elif request.POST['height']:
+            if request.POST['height']:
                 user.height = request.POST['height']
                 user.save()
-            elif request.POST['weight']:
+            if request.POST['weight']:
                 user.weight = request.POST['weight']
                 user.save()
 
@@ -299,7 +304,7 @@ def account_settings(request):
                 user.picture = request.FILES['Picture']
 
             user.save()
-            return HttpResponseRedirect('%s'%(reverse('account')))
+            return HttpResponseRedirect('%s'%(reverse('workoutweb:account')))
 
 
     return render(request, 'workoutweb/account_settings.html', {'form':form})

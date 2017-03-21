@@ -23,7 +23,7 @@
                         <!-- Posts -->
                         {% if posts %}
                              {% for post in posts %}
-                                <h2><a href="{% url 'show_post' category.slug post.slug %}">{{ post.title }}</a></h2>
+                                <h2><a href="{% url 'workoutweb:show_post' category.slug post.slug %}">{{ post.title }}</a></h2>
 
                                 <!-- Date/Time Likes/Views-->
                                 <p><span class="glyphicon glyphicon-time"></span> {{ post.time }}</p>

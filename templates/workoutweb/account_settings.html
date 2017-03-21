@@ -12,11 +12,11 @@
         </div>
         <div class="form-group">
           <label for="weight">Weight:</label>
-          <input type="number" class="form-control" id="weight" placeholder="Enter Weight: in Kg's " name="weight">
+          <input type="number" class="form-control" id="weight" placeholder="Enter Weight: in Kg's " name="weight"min="0">
         </div>
         <div class="form-group">
           <label for="height">Height:</label>
-          <input type="number" class="form-control" id="height" placeholder="Enter Height: in meters" name="height">
+          <input type="number" class="form-control" id="height" placeholder="Enter Height: in meters" name="height"min="0">
         </div>
           <div class="form-group">
           <label for="picture">Picture:</label>
@@ -27,6 +27,6 @@
 
     {% if updated %}
         <strong>You have successfully updated your profile!</strong>
-        <a href="/workoutweb/account/">click to go back to your account.</a><br />
+        <a href="{% url 'workoutweb:account' %}">click to go back to your account.</a><br />
     {% endif %}
 {% endblock %}

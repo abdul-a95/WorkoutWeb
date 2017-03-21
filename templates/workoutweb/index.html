@@ -34,7 +34,7 @@
         <ul>
             {%  for  key,value in categories.items %}
                 <div class="tab">
-                    <h3><font face="Berlin Sans FB"><a href="{% url 'show_category' key.slug %}">{{ key.name }}</a></font></h3>
+                    <h3><font face="Berlin Sans FB"><a href="{% url 'workoutweb:show_category' key.slug %}">{{ key.name }}</a></font></h3>
                 </div>
             <table>
                 <thead>
@@ -65,4 +65,3 @@
     </div>
 
 {% endblock %}
-

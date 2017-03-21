@@ -96,6 +96,7 @@ def show_post(request, post_name_slug, category_name_slug):
     # to the template rendering engine.
     post = Post.objects.get(slug=post_name_slug)
     context_dict = {}
+
     for userlike in post.userliked.all():
         if userlike == request.user:
             context_dict['liked'] = True

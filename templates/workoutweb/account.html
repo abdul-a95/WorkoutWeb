@@ -8,17 +8,20 @@
 
 {% block body_block %}
     <div class = "profilepic">
-    {% if user.userprofile.picture %}
-        <img src="{{ MEDIA_URL }}{{ user.userprofile.picture}}"/>
-    {% else %}
-        <img src="{% static 'images/default-profile.jpg' %}"/>
-    {% endif %}
+        {% if user.userprofile.picture %}
+            <img src="{{ MEDIA_URL }}{{ user.userprofile.picture}}"/>
+        {% else %}
+            <img src="{% static 'images/default-profile.jpg' %}"/>
+        {% endif %}
     </div>
-    <h1><p>Username: {{ user.userprofile.user }}</p></h1>
-    <p>Bio: {{ user.userprofile.bio }}</p>
-    <p>Height: {{ user.userprofile.height }}</p>
-    <p>weight: {{ user.userprofile.weight }}</p>
+    <div>
+        <h1><p>Username: {{ user.userprofile.user }}</p></h1>
+        <p>Bio: {{ user.userprofile.bio }}</p>
+        <p>Height: {{ user.userprofile.height }}</p>
+        <p>weight: {{ user.userprofile.weight }}</p>
+    </div>
 
-     <strong>click here to update your profile page</strong>
-    <a href="/workoutweb/account_settings">Account Settings</a></br>
+    <strong>click here to update your profile page</strong>
+    <a href="/workoutweb/account_settings">Change Account Settings</a></br>
+
 {% endblock %}

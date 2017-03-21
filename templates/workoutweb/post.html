@@ -1,5 +1,5 @@
 {%  extends 'workoutweb/base.html' %}
-
+{% load workoutweb_template_tags %}
 
 {%  block body_block %}
     <!-- Page Content -->
@@ -30,7 +30,7 @@
 
                 <!-- Post Content -->
                 <div class="lead">
-                    <ul>{{ post.content }} </ul>
+                    <p>{{ post.content }} </p>
                 </div>
 
 
@@ -73,7 +73,7 @@
                                     <h4 class="media-heading">{{ comment.user }}
                                         <small><span class="glyphicon glyphicon-time"></span>{{ comment.time }}</small>
                                     </h4>
-                                    <p>{{ comment.content }} </p>
+                                    <p>{{ comment.content }}</p>
                                     </div>
                             </div>
                         {% else %}
@@ -95,11 +95,25 @@
                     <strong>No comments, be the first to reply!</strong>
                 {% endif %}
             </div>
-
-
                 {% else %}
                     The specified post does not exist!
                 {% endif %}
+
+            </div>
+
+            <!-- Blog Categories Well -->
+            <div class="col-md-4">
+                <div class="well">
+                    <h4>Categories</h4>
+                    <div class="row">
+                        <div>
+                            {% get_category_list %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form><INPUT Type="button" VALUE="Back" onClick="history.go(-1);return true;"></form>
             </div>
         </div>
     </div>

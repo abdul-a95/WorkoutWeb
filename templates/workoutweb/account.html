@@ -7,13 +7,19 @@
 {% endblock %}
 
 {% block body_block %}
+
     <div class = "profilepic">
+
         {% if user.userprofile.picture %}
-            <img src="{{ MEDIA_URL }}{{ user.userprofile.picture}}"/>
+            <img class="img-circle img-center" src="{{ MEDIA_URL }}{{ user.userprofile.picture}}"
+                alt="profilepic" width="300" height="300"/>
         {% else %}
-            <img src="{% static 'images/default-profile.jpg' %}"/>
+            <img class="img-circle img-center" src="{% static 'images/default-profile.jpg' %}"
+                alt="profilepic" width="300" height="300"/>
         {% endif %}
+
     </div>
+
     <div>
     <h1><p>Username: {{ user.userprofile.user }}</p></h1>
     <p>Bio: {{ user.userprofile.bio }}</p>
@@ -34,3 +40,4 @@
     <strong>click here to update your profile page</strong>
     <a href="{% url 'workoutweb:account_settings' %}">Account Settings</a></br>
 {% endblock %}
+

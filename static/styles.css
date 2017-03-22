@@ -223,5 +223,15 @@ tr:last-of-type td:last-child {
 
 .profilepic {
    padding:1px;
-   border:1px solid #021a40;
+   border:1px solid white;
+   background-image: url("/static/images/background2.jpg");
+   background-position: 0px -10px;
+
 }
+
+.profilepic img {
+    border: none;
+    display: block;
+    margin: 0 auto;
+}
+

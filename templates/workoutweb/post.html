@@ -1,5 +1,6 @@
 {%  extends 'workoutweb/base.html' %}
 {% load workoutweb_template_tags %}
+{% load staticfiles %}
 
 {%  block body_block %}
     <!-- Page Content -->
@@ -66,7 +67,11 @@
                         {% if comment.user %}
                             <div class="media">
                                  <a class="pull-left">
-                                    <img class="media-object" src="http://placehold.it/64x64" alt="">
+                                     {% if user.userprofile.picture %}
+                                        <img class="media-object" src="{{ MEDIA_URL }}{{ user.userprofile.picture}}"height="64"width="64"/>
+                                     {% else %}
+                                        <img class = "media-object" src="{% static 'images/default-profile.jpg' %}"height="64"width="64"/>
+                                    {% endif %}
                                 </a>
 
                                 <div class="media-body">
@@ -79,7 +84,7 @@
                         {% else %}
                             <div class="media">
                                  <a class="pull-left">
-                                    <img class="media-object" src="http://placehold.it/64x64" alt="">
+                                   <img class = "media-object" src="{% static 'images/default-profile.jpg' %}"height="64"width="64"/>
                                 </a>
 
                                 <div class="media-body">

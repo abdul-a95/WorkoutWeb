@@ -23,11 +23,10 @@
                         <!-- Posts -->
                         {% if posts %}
                              {% for post in posts %}
-                                <h2><a href="{% url 'workoutweb:show_post' category.slug post.slug %}">{{ post.title }}</a></h2>
+                                <h2><b><a href="{% url 'workoutweb:show_post' category.slug post.slug %}">{{ post.title }}</a></b></h2>
 
                                 <!-- Date/Time Likes/Views-->
                                 <p><span class="glyphicon glyphicon-time"></span> {{ post.time }}</p>
-                                <p><span class="glyphicon glyphicon-thumbs-up"</span><b>likes:</b>{{post.likes}} <span class="glyphicon glyphicon-eye-open"</span><b>views:</b>{{post.views}}</p>
 
                                 <br>
 
@@ -35,6 +34,7 @@
                                 <div class="lead">
                                     <p>{{ post.content }} </p>
                                 </div>
+                                 <p><span class="glyphicon glyphicon-thumbs-up"</span><b>likes:</b>{{post.likes}} <span class="glyphicon glyphicon-eye-open"</span><b>views:</b>{{post.views}}</p>
                                 <hr>
                              {% endfor %}
                         {% else %}

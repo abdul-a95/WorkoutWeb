@@ -188,7 +188,8 @@ def register(request):
             registered = True
 
         else:
-            context_dict['error'] = "Invalid Form Entry. Please try again."
+            for error in user_form.errors:
+                context_dict['error'] = user_form.errors[error]
             print(user_form.errors, profile_form.errors)
     else:
 

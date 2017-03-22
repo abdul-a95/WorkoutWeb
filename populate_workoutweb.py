@@ -123,6 +123,7 @@ def add_post(cat, title, comments,  content, likes=0, views=0):
     for comment in comments:
         c = Comment.objects.get_or_create(post = p, title = comment)[0]
         c.content = comments[comment]
+        c.time = now.strftime('%B ''%d'', ''%Y '' at ''%I'':''%M'' %p')
         c.username = "Guest"+str((randint(0,1000)))
         c.save()
     return p

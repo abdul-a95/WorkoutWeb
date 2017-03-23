@@ -17,4 +17,9 @@ urlpatterns = [
         views.show_post, name='show_post'),
     url(r'^category/(?P<category_name_slug>[\w\-]+)/(?P<post_name_slug>[\w\-]+)/liked/$',
         views.liked, name='liked'),
+    url(r'^category/(?P<category_name_slug>[\w\-]+)/(?P<post_name_slug>[\w\-]+)/disliked/$',
+        views.disliked, name='disliked'),
+    url(r'^category/(?P<category_name_slug>[\w\-]+)/(?P<post_name_slug>[\w\-]+)/removepost/$',
+        views.removepost, name='Remove Post'),
+    url(r'', views.index, name='index'),
 ]

@@ -23,8 +23,16 @@
     <div>
     <h1><p>Username: {{ user.userprofile.user }}</p></h1>
     <p>Bio: {{ user.userprofile.bio }}</p>
-    <p>Height: {{ user.userprofile.height }}kg</p>
-    <p>weight: {{ user.userprofile.weight }}cm</p>
+    {% if user.userprofile.weight %}
+    <p>Weight: {{ user.userprofile.weight }}kg</p>
+    {% else %}
+    <p>Weight: N/A</p>
+    {% endif %}
+    {% if user.userprofile.height %}
+        <p>Height: {{ user.userprofile.height }}cm</p>
+    {% else %}
+        <p>Height: N/A</p>
+    {% endif %}
     </div>
 
     <h2>Posts you have liked</h2>

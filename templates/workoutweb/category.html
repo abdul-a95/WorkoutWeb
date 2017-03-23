@@ -28,13 +28,20 @@
                                 <!-- Date/Time Likes/Views-->
                                 <p><span class="glyphicon glyphicon-time"></span> {{ post.time }}</p>
 
-                                <br>
-
                                 <!-- Post Content -->
                                 <div class="lead">
                                     <p>{{ post.content }} </p>
                                 </div>
-                                 <p><span class="glyphicon glyphicon-thumbs-up"</span><b>likes:</b>{{post.likes}} <span class="glyphicon glyphicon-eye-open"</span><b>views:</b>{{post.views}}</p>
+                                <p><span class="glyphicon glyphicon-thumbs-up"</span><b>likes:</b>{{post.likes}} <span class="glyphicon glyphicon-eye-open"</span><b>views:</b>{{post.views}}</p>
+
+                                <br>
+                                {% if post in userlikedposts %}
+                                    <form action="/workoutweb/category/{{ category.slug }}/{{ post.slug }}/removepost/" method="delete">
+                                        {% csrf_token %}
+                                        <button type="submit" value="preview" name="Preview">Delete post</button>
+                                    </form>
+                                {% endif %}
+
                                 <hr>
                              {% endfor %}
                         {% else %}
@@ -60,6 +67,8 @@
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </div>
                         </form>
+                        {% else %}
+                          <b> <font size="5" color="Black"> In order to create a post, please <a href="/accounts/register/">sign up</a> for an account.</font></b>
                         {% endif %}
                     {% else %}
                         The specified category does not exist!

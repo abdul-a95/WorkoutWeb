@@ -63,6 +63,8 @@ def show_category(request, category_name_slug):
     # Create a context dictionary which we can pass
     # to the template rendering engine.
     context_dict = {}
+    post = Post.objects.filter(user=request.user)
+    context_dict['userlikedposts'] = post
     context_dict['repeat'] = None
     try:
         category = Category.objects.get(slug=category_name_slug)
@@ -72,7 +74,6 @@ def show_category(request, category_name_slug):
     except Category.DoesNotExist:
         context_dict['category'] = None
         context_dict['posts'] = None
-
     try:
         category =  Category.objects.get(slug=category_name_slug)
     except Category.DoesNotExist:
@@ -157,11 +158,27 @@ def show_post(request, post_name_slug, category_name_slug):
 
 def liked(request,post_name_slug,category_name_slug):
     post = Post.objects.get(slug=post_name_slug)
-    post.likes = post.likes + 1
-    post.save()
-    post.userliked.add(request.user.id)
-    request.method = 'LIKE'
+    if post not in Post.objects.filter(userliked = request.user):
+        post.likes = post.likes + 1
+        post.save()
+        post.userliked.add(request.user.id)
+        request.method = 'LIKE'
     return show_post(request,post_name_slug,category_name_slug)
+
+def disliked(request,post_name_slug,category_name_slug):
+    post = Post.objects.get(slug=post_name_slug)
+    if post in Post.objects.filter(userliked = request.user):
+        post.likes = post.likes - 1
+        post.save()
+        post.userliked.remove(request.user.id)
+        request.method = 'LIKE'
+    return show_post(request,post_name_slug,category_name_slug)
+
+def removepost(request,post_name_slug,category_name_slug):
+    post = Post.objects.get(slug=post_name_slug)
+    post.delete()
+    request.method = 'GET'
+    return show_category(request,category_name_slug)
 
 def register(request):
     registered = False

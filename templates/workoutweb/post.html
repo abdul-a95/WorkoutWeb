@@ -14,9 +14,6 @@
                 <!-- Blog Post -->
 
                 {% if post %}
-                      {% if liked %}
-                        <b>Post has been liked! Thanks for your feedback!!</b>
-                      {% endif %}
                       <h1><b>{{ post.title }}</b></h1>
 
                 <!-- Author -->
@@ -25,8 +22,7 @@
                 </p>
 
                 <!-- Date/Time -->
-                <p><span class="glyphicon glyphicon-time"></span> {{ post.time }}</p>
-
+                <p><span class="glyphicon glyphicon-time"></span> {{ post.time }}
                 <hr>
 
                 <!-- Post Content -->
@@ -36,14 +32,19 @@
 
 
                 {% if liked %}
+                    <form action="/workoutweb/category/{{ post.category.slug }}/{{ post.slug }}/disliked/" method="post">
+                        {% csrf_token %}
+                        <button type="submit" value="preview" name="Preview">Dislike</button>
+                    </form>
                 {% else %}
                 {% if user.is_authenticated %}
                      <form action="/workoutweb/category/{{ post.category.slug }}/{{ post.slug }}/liked/" method="post">
-                     {% csrf_token %}
-                    <button type="submit" value="preview" name="Preview">Like</button>
-                    {% endif %}
-                </form>
+                         {% csrf_token %}
+                        <button type="submit" value="preview" name="Preview">Like</button>
+                     </form>
                 {% endif %}
+                {% endif %}
+                        <p><span class="glyphicon glyphicon-thumbs-up"</span><b>likes:</b>{{post.likes}}</p>
 
 
                 <!-- Blog Comments -->

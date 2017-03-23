@@ -1,40 +1,126 @@
 {%  extends 'workoutweb/base.html' %}
-
+{% load workoutweb_template_tags %}
+{% load staticfiles %}
 
 {%  block body_block %}
-      <div>
-      {% if post %}
-          <h1>{{ post.title }}</h1>
-          <ul>{{ post.content }} </ul>
-          <h2>Comment Section</h2>
-         {% if comments %}
+    <!-- Page Content -->
+    <div class="container">
+
+        <div class="row">
+
+            <!-- Blog Post Content Column -->
+            <div class="col-lg-8">
+
+                <!-- Blog Post -->
+
+                {% if post %}
+                      {% if liked %}
+                        <b>Post has been liked! Thanks for your feedback!!</b>
+                      {% endif %}
+                      <h1><b>{{ post.title }}</b></h1>
+
+                <!-- Author -->
+                <p class="lead">
+                    by <small>{{post.user}}</small></a>
+                </p>
+
+                <!-- Date/Time -->
+                <p><span class="glyphicon glyphicon-time"></span> {{ post.time }}</p>
+
+                <hr>
+
+                <!-- Post Content -->
+                <div class="lead">
+                    <p>{{ post.content }} </p>
+                </div>
+
+
+                {% if liked %}
+                {% else %}
+                {% if user.is_authenticated %}
+                     <form action="/workoutweb/category/{{ post.category.slug }}/{{ post.slug }}/liked/" method="post">
+                     {% csrf_token %}
+                    <button type="submit" value="preview" name="Preview">Like</button>
+                    {% endif %}
+                </form>
+                {% endif %}
+
+
+                <!-- Blog Comments -->
+
+                <!-- Comments Form -->
+                    <div class="well">
+                        <h4>Leave a Comment:</h4>
+                        <form id="comment_form" method="post" action="/workoutweb/category/{{ post.category.slug }}/{{ post.slug }}/">
+                                {% csrf_token %}
+                            <div class="form-group">
+                                <textarea class="form-control" form="comment_form" rows="3" name="content" value="Create Comment" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+
+            <div>
+                <h2>Comment Section</h2>
+                {% if comments %}
                     {% for comment in post.comments.all %}
                         {% if comment.user %}
-                            <h3>{{ comment.user }}</h3>
-                        {% else %}
-                            <h3>Anonymous</h3>
-                        {% endif %}
-                        <ul>{{ comment.content }} </ul>
-                    {% endfor %}
-         {% else %}
-             <strong>No comments, be the first to reply!</strong>
-         {% endif %}
-          <form id="comment_form" method="post" action="/workoutweb/category/{{ post.category.slug }}/{{ post.slug }}/">
-                {% csrf_token %}
-                {% for hidden in form.hidden_fields %}
-                    {{ hidden }}
-                {% endfor %}
-                {% for field in form.visible_fields %}
-                    {{ field.errors }}
-                    {{ field.help_text }}
-                    {{ field }}
-                {% endfor %}
-               <input type="submit" name="submit" value="Create Comment" />
-          </form>
+                            <div class="media">
+                                 <a class="pull-left">
+                                     {% if user.userprofile.picture %}
+                                        <img class="media-object" src="{{ MEDIA_URL }}{{ user.userprofile.picture}}"height="64"width="64"/>
+                                     {% else %}
+                                        <img class = "media-object" src="{% static 'images/default-profile.jpg' %}"height="64"width="64"/>
+                                    {% endif %}
+                                </a>
 
-     {% else %}
-         The specified post does not exist!
-     {% endif %}
-     </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading">{{ comment.user }}
+                                        <small><span class="glyphicon glyphicon-time"></span>{{ comment.time }}</small>
+                                    </h4>
+                                    <p>{{ comment.content }}</p>
+                                    </div>
+                            </div>
+                        {% else %}
+                            <div class="media">
+                                 <a class="pull-left">
+                                   <img class = "media-object" src="{% static 'images/default-profile.jpg' %}"height="64"width="64"/>
+                                </a>
+
+                                <div class="media-body">
+                                    <h4 class="media-heading"> {{comment.username}}
+                                        <small><span class="glyphicon glyphicon-time"></span>{{ comment.time }}</small>
+                                    </h4>
+                                    <p>{{ comment.content }} </p>
+                                    </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <strong>No comments, be the first to reply!</strong>
+                {% endif %}
+
+            </div>
+
+            </div>
+
+            <!-- Blog Categories Well -->
+            <div class="col-md-4">
+                <div class="well">
+                    <h4>Categories</h4>
+                    <div class="row">
+                        <div>
+                            {% get_category_list %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <button><a href="/workoutweb/category/{{ post.category.slug }}/">Back</a></button>
+            </div>
+        </div>
+    </div>
+{% else %}
+    The specified category does not exist!
+{% endif %}
 
 {% endblock %}

@@ -12,21 +12,17 @@ class PostForm(forms.ModelForm):
                             help_text="Please enter the title of the post.")
     content = forms.CharField(max_length=1024,
                               help_text="Please enter your post content.")
-    views = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
-    likes = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
     #slug = forms.CharField(widget=forms.HiddenInput())
     class Meta:
         model = Post
         fields = ('title','content')
 
 class CommentForm(forms.ModelForm):
-        title = forms.CharField(max_length=128,
-                                help_text="Please enter the title of the comment.")
         content = forms.CharField(max_length=1024,
                                     help_text="Please enter your comment.")
         class Meta:
             model = Comment
-            fields = ('title', 'content')
+            fields = ( 'content',)
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
@@ -39,6 +35,7 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ('height','weight', 'picture')
+
 
 class ContactForm(forms.Form):
     contact_name = forms.CharField(required=True)

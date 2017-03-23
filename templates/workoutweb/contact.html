@@ -7,51 +7,48 @@
 
 {% block body_block %}
 
-<div class="container">
-  <h1><font face="Berlin Sans FB">Contact Us</font></h1>
-  <form id="ContactForm" method="post" action="../">
-      {% csrf_token %}
-    <div class="form-group">
-      <label for="usr">Name</label>
-      <input type="text" class="form-control" id="name" placeholder="Enter name" name="name" value="" size="50" required>
-    </div>
-    <div class="form-group">
-      <label for="pwd">Email</label>
-      <input type="email" class="form-control" id="email" placeholder="Enter email" name="email" value="" size="50" required>
-    </div>
-    <div class="form-group">
-      <label for="pwd">Message</label>
-      <input type="text" class="form-control" id="message" placeholder="Enter Message" name="message" value="" size="150" required>
-    </div>
-    <button type="submit" class="btn btn-default">Submit</button>
-  </form>
-</div>
-
-<div class="container">
-    <h3><font face="Berlin Sans FB">For Further Enquiries</font></h3>
-    </div>
-
     <div class="container">
-    <strong>Ring us:</strong>
-    01413397641 </br>
-    </div>
 
-    <div class="container">
-    <strong>Send us an email:</strong>
-    help@workoutweb.com </br>
-    </div>
+        <!-- Introduction Row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Contact Us
+                    <small>Have a chat with us!</small>
+                </h1>
+            </div>
+        </div>
 
-    <div class="container">
-        <strong>Or even visit us!</strong>
-    </div>
-    <div class="container">
-        <img src="{% static "images/findus.jpg" %}"
-             alt="Our HQ" />
-    </div>
+        <!-- Contact Us Form -->
+        <form id="ContactForm" method="post" action="../">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" placeholder="Enter name" name="name" value="" size="50" required>
+            </div>
 
-    <div class="container">
-        <strong>Need more info?</strong>
-        <a href="/workoutweb/FAQ">FAQ</a></br>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter email" name="email" value="" size="50" required>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Message</label>
+                <input type="text" class="form-control" id="message" placeholder="Enter Message" name="message" value="" size="150" required>
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+
+        <div>
+            <h3><font face="Berlin Sans FB">For Further Enquiries</font></h3>
+            <strong>Ring us:</strong>01413397641 </br>
+            <strong>Send us an email:</strong>help@workoutweb.com </br>
+            <img src="{% static 'images/findus.jpg' %}" alt="Our HQ" />
+        </div>
+
+        <div>
+            <strong>Or even visit us!</strong>
+            <strong>Need more info?</strong><a href="{% url 'workoutweb:faq' %}">FAQ</a></br>
+        </div>
     </div>
 
 {%  endblock %}

@@ -6,47 +6,58 @@
 
 {%  block body_block %}
 
-<div class="container">
-  <h2>Register</h2>
-    {% if registered %}
-        <strong>Thank you for registering!</strong>
-        <a href="/accounts/login">please proceed to login.</a><br />
-    {% else %}
-      <form id="user_form" method="post" action="."
-                  enctype="multipart/form-data">
-          {% csrf_token %}
+    <!-- Checks if already registered to send user directly to log in page -->
+    <div class="container">
+        <h2>Register</h2>
+            {% if registered %}
+                <strong>Thank you for registering!</strong>
+                <a href="/accounts/login">please proceed to login.</a><br />
+            {% else %}
+                {% if error %}
+                     <b><font size="3" color="red">{{ error }}</font></b>
+                {% endif %}
+                <form id="user_form" method="post" action="."
+                          enctype="multipart/form-data">
+                    {% csrf_token %}
 
-        <div class="form-group">
-            <label for="name">Name:</label>
-            <input type="text" class="form-control" id="name" placeholder="Enter Name: " name= "name" value="" size="50" required>
-        </div>
-        <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" class="form-control" id="username" placeholder="Enter Username: " name="username" value="" size="50" required>
-        </div>
-        <div class="form-group">
-          <label for="email">Email:</label>
-          <input type="email" class="form-control" id="email" placeholder="Enter email: " name="email" value="" size="50" required>
-        </div>
-        <div class="form-group">
-          <label for="pwd">Password:</label>
-          <input type="password" class="form-control" id="pwd" placeholder="Enter password: " name="password" value="" size="50" required>
-        </div>
-        <div class="form-group">
-          <label for="weight">Weight:</label>
-          <input type="number" class="form-control" id="weight" placeholder="Enter Weight: in Kg's " name="weight">
-        </div>
-        <div class="form-group">
-          <label for="height">Height:</label>
-          <input type="number" class="form-control" id="height" placeholder="Enter Height: in meters" name="height">
-        </div>
-          <div class="form-group">
-          <label for="picture">Picture:</label>
-          <input type="file" class="form-control" id="picture" placeholder="Upload picture" name="Picture">
-          </div>
-        <button type="submit" class="btn btn-default">Register</button>
-      </form>
-    {% endif %}
-</div>
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" class="form-control" id="name" placeholder="Enter Name: " name= "name" value="" size="50" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" class="form-control" id="username" placeholder="Enter Username: " name="username" value="" size="50" required>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="email">Email:</label>
+                      <input type="email" class="form-control" id="email" placeholder="Enter email: " name="email" value="" size="50" required>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="pwd">Password:</label>
+                      <input type="password" class="form-control" id="pwd" placeholder="Enter password: " name="password" value="" size="50" required>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="weight">Weight:</label>
+                      <input type="number" class="form-control" id="weight" placeholder="Enter Weight: in Kg's " name="weight"min="0">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="height">Height:</label>
+                      <input type="number" class="form-control" id="height" placeholder="Enter Height: in meters" name="height"min="0">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="picture">Picture:</label>
+                      <input type="file" class="form-control" id="picture" placeholder="Upload picture" name="Picture">
+                    </div>
+
+                    <button type="submit" class="btn btn-default">Register</button>
+                </form>
+            {% endif %}
+    </div>
 
 {% endblock %}

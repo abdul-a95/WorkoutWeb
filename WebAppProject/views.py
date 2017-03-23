@@ -12,6 +12,9 @@ from django.core.mail import EmailMessage
 from django.shortcuts import redirect
 from django.template import Context
 from django.template.loader import get_template
+import datetime
+from random import randint
+import string
 
 
 def index(request):
@@ -39,12 +42,18 @@ def account(request):
         return HttpResponseRedirect('/login')
     userprofile = UserProfile.objects.filter(user_id=request.user.id)
 
+    error = None
+    try:
+        post = Post.objects.filter(userliked=request.user)
+    except Post.DoesNotExist:
+        post = None
+        error = "you haven't liked anything"
 
-    return render(request, 'workoutweb/account.html', {'userprofile':userprofile})
+    return render(request, 'workoutweb/account.html', {'userprofile':userprofile,'post':post})
 
 def nearestgym(request):
     context_dict = {}
-    return render(request, 'workoutweb/nearest-gym.html', context_dict)
+    return render(request, 'workoutweb/nearest_gym.html', context_dict)
 
 def faq(request):
     context_dict = {}
@@ -78,8 +87,19 @@ def show_category(request, category_name_slug):
                 try:
                     post = form.save(commit=False)
                     post.category = category
-                    post.save()
-                    context_dict['repeat'] = None
+                    post.user = request.user.username
+                    now = datetime.datetime.now()
+                    post.time = now.strftime('Posted On ' '%B ''%d'', ''%Y '' at ''%I'':''%M'' %p')
+                    letters = False
+                    for n in post.title:
+                        print n
+                        if n in string.ascii_letters:
+                            letters = True
+                    if letters:
+                        post.save()
+                        context_dict['repeat'] = None
+                    else:
+                        context_dict['repeat'] = 'Please involve letters in your title'
                 except:
                     context_dict['repeat'] = 'Post title exists.'
         else:
@@ -92,12 +112,18 @@ def show_post(request, post_name_slug, category_name_slug):
     # Create a context dictionary which we can pass
     # to the template rendering engine.
     context_dict = {}
+    #  if request.user in post.userliked:
+       # context_dict['liked'] = True
     try:
         post = Post.objects.get(slug=post_name_slug)
-        print post
+        for userlike in post.userliked.all():
+            if userlike == request.user:
+                context_dict['liked'] = True
         comments = Comment.objects.filter(post=post)
         context_dict['post'] = post
         context_dict['comments'] = comments
+        post.views = post.views + 1
+        post.save()
     except Post.DoesNotExist:
         context_dict['post'] = None
         context_dict['comments'] = None
@@ -115,17 +141,31 @@ def show_post(request, post_name_slug, category_name_slug):
             if post:
                 comment = form.save(commit=False)
                 comment.post = post
+                now = datetime.datetime.now()
+                comment.time = now.strftime('%B ''%d'', ''%Y '' at ''%I'':''%M'' %p')
                 if request.user.is_authenticated:
                     comment.user = request.user
                 else:
+                    guestnum = (randint(0, 1000))
                     comment.user = None
+                    comment.username = "Guest"+str(guestnum)
                 comment.save()
 
     context_dict['form'] = form
     return render(request, 'workoutweb/post.html', context_dict)
 
+
+def liked(request,post_name_slug,category_name_slug):
+    post = Post.objects.get(slug=post_name_slug)
+    post.likes = post.likes + 1
+    post.save()
+    post.userliked.add(request.user.id)
+    request.method = 'LIKE'
+    return show_post(request,post_name_slug,category_name_slug)
+
 def register(request):
     registered = False
+    context_dict = {}
     if request.method == 'POST':
         user_form = UserForm(data=request.POST)
         profile_form = UserProfileForm(data=request.POST)
@@ -139,28 +179,27 @@ def register(request):
             profile = profile_form.save(commit=False)
             profile.user = user
 
-            print request.FILES
 
             if 'Picture' in request.FILES:
                 profile.picture = request.FILES['Picture']
-            else:
-                print "pic not found"
+
 
             profile.save()
             registered = True
 
         else:
-
+            for error in user_form.errors:
+                context_dict['error'] = user_form.errors[error]
             print(user_form.errors, profile_form.errors)
-
     else:
+
 
         user_form = UserForm()
         profile_form = UserProfileForm()
-
-    return render(request,'registration/registration_form.html',{'user_form': user_form,
-                                                          'profile_form': profile_form,
-                                                          'registered': registered})
+    context_dict['user_form'] = user_form
+    context_dict['profile_form'] = profile_form
+    context_dict['registered'] = registered
+    return render(request,'registration/registration_form.html',context_dict)
 
 
 def user_login(request):
@@ -257,3 +296,29 @@ def contact(request):
             email.send()
             return redirect('contact')
     return render(request, 'workoutweb/contact.html',{'form': form_class})
+
+
+@login_required
+def account_settings(request):
+    user = UserProfile.objects.get(user_id=request.user.id)
+    form = UserProfileForm(request.POST or None, initial={'bio':user.bio,'height':user.height,'weight':user.weight})
+    if request.method == 'POST':
+        if form.is_valid():
+            if request.POST['bio']:
+                user.bio = request.POST['bio']
+                user.save()
+            if request.POST['height']:
+                user.height = request.POST['height']
+                user.save()
+            if request.POST['weight']:
+                user.weight = request.POST['weight']
+                user.save()
+
+            if 'Picture' in request.FILES:
+                user.picture = request.FILES['Picture']
+
+            user.save()
+            return HttpResponseRedirect('%s'%(reverse('workoutweb:account')))
+
+
+    return render(request, 'workoutweb/account_settings.html', {'form':form})

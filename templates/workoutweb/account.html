@@ -39,7 +39,18 @@
     {% if post %}
         {% for userpost in post %}
         <ul>
-            <li><strong>{{ userpost }} </strong></li>
+            <li><strong>{{ userpost }}</strong></li>
+        </ul>
+        {% endfor %}
+    {% else %}
+        <p>No posts to show</p>
+    {% endif %}
+
+    <h2>Posts you have made</h2>
+    {% if userspost %}
+        {% for p in userspost %}
+        <ul>
+            <li><strong>{{ p }}</strong></li>
         </ul>
         {% endfor %}
     {% else %}

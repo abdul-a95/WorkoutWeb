@@ -119,6 +119,15 @@ class IndexPageTests(TestCase):
         response = self.client.get(reverse('workoutweb:index'))
         self.assertTemplateUsed(response, 'workoutweb/index.html')
 
+    def test_index_aboutpage_link(self):
+        response = self.client.get(reverse("workoutweb:index"))
+        self.assertContains(response, '<a href="%s">About Us</a>' % reverse("workoutweb:about"), html=True)
+
+    def test_index_nearestgym_link(self):
+        response = self.client.get(reverse("workoutweb:index"))
+        self.assertContains(response, '<a href="%s">Find Nearest Gym</a>' % reverse("workoutweb:nearest_gym"),
+                            html=True)
+
 
 class IndexViewTests(TestCase):
     def test_index_view_with_no_categories(self):

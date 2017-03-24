@@ -1,6 +1,9 @@
 from django.conf.urls import url
 from WebAppProject import views
 
+
+# list of urls defined for our website
+# making use of django namespacing
 app_name = 'workoutweb'
 urlpatterns = [
     url(r'^$', views.index, name='index'),

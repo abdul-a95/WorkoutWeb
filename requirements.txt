@@ -1,0 +1,4 @@
+-U django==1.10
+pillow
+django-registration-redux
+django-bootstrap-toolkit

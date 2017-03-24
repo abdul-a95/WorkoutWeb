@@ -32,29 +32,39 @@ def index(request):
     context_dict['categories'] = cat_dict
     return render(request,'workoutweb/index.html', context_dict)
 
+# returns a render request to the about page with empty context dictionary
 def about(request):
     context_dict = {}
     return render(request, 'workoutweb/about.html', context_dict)
 
+# handles the account page view
+# if user tries to access this url without being logged in then they'll be directed to login page
 @login_required
 def account(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/login')
+
+    # retrieves all fields associated with logged in user
     userprofile = UserProfile.objects.filter(user_id=request.user.id)
 
-    error = None
+    # retrieves all the posts liked by the user
     try:
         post = Post.objects.filter(userliked=request.user)
     except Post.DoesNotExist:
         post = None
-        error = "you haven't liked anything"
 
-    return render(request, 'workoutweb/account.html', {'userprofile':userprofile,'post':post})
+    try:
+        userspost = Post.objects.filter(user=request.user)
+    except Post.DoesNotExist:
+        userspost = None
+    return render(request, 'workoutweb/account.html', {'userprofile':userprofile,'post':post,'userspost':userspost})
 
+# returns a render request to the about page with empty context dictionary
 def nearestgym(request):
     context_dict = {}
     return render(request, 'workoutweb/nearest_gym.html', context_dict)
 
+# returns a render request to the about page with empty context dictionary
 def faq(request):
     context_dict = {}
     return render(request, 'workoutweb/faq.html', context_dict)
@@ -180,6 +190,9 @@ def removepost(request,post_name_slug,category_name_slug):
     request.method = 'GET'
     return show_category(request,category_name_slug)
 
+# view for registering a user
+# making use of userform and userprofileform
+# returns a context dictionary of botb tbese forms and whether user successfully registered
 def register(request):
     registered = False
     context_dict = {}
@@ -196,7 +209,8 @@ def register(request):
             profile = profile_form.save(commit=False)
             profile.user = user
 
-
+            # checks to see if a picture has been uploaded
+            # optional field
             if 'Picture' in request.FILES:
                 profile.picture = request.FILES['Picture']
 
@@ -209,10 +223,9 @@ def register(request):
                 context_dict['error'] = user_form.errors[error]
             print(user_form.errors, profile_form.errors)
     else:
-
-
         user_form = UserForm()
         profile_form = UserProfileForm()
+
     context_dict['user_form'] = user_form
     context_dict['profile_form'] = profile_form
     context_dict['registered'] = registered
@@ -220,7 +233,6 @@ def register(request):
 
 
 def user_login(request):
-    print "@@@@@@"
     # If the request is a HTTP POST, try to pull out the relevant information.
     if request.method == 'POST':
         # Gather the username and password provided by the user.
@@ -265,13 +277,6 @@ def user_login(request):
 def restricted(request):
     return render(request, 'workoutweb/restricted.html',{})
 
-def update_profile(request, user_id):
-    user = User.objects.get(pk=user_id)
-    user.profile.weight = '155'
-    user.profile.height = '170'
-    user.save()
-
-
 def user_logout(request):
     # Since we know the user is logged in, we can now just log them out.
     logout(request)
@@ -314,7 +319,11 @@ def contact(request):
             return redirect('contact')
     return render(request, 'workoutweb/contact.html',{'form': form_class})
 
-
+# view which allows users to change their account details
+# i.e bio height and weight or upload a picture
+# had to check if each field was in the post request incase user didn't want to change all of their details
+# and save after each one
+# once submitted user is redirected to their profile page
 @login_required
 def account_settings(request):
     user = UserProfile.objects.get(user_id=request.user.id)

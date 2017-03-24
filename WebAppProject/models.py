@@ -1,6 +1,3 @@
-
-# WHERE/ WHAT IS SLUG ?!?!?!?!?!?!?!?
-
 from __future__ import unicode_literals
 
 from django.db import models
@@ -10,25 +7,27 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.validators import MinValueValidator, MaxValueValidator
 
-
+# category model that contains a name as a field
+# and a sluf field
 class Category(models.Model):
     slug = models.SlugField(unique=True)
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
-        super(Category, self).save(*args,**kwargs)
-
     name = models.CharField(max_length=128, unique=True)
+
     class Meta:
         verbose_name_plural = 'Categories'
 
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Category, self).save(*args,**kwargs)
+
+# Post model that takes all the fields defined below
+# and contains a slug field
+# has relationships with category and userprofile model
 class Post(models.Model):
     slug = models.SlugField(unique=True)
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.title)
-        super(Post, self).save(*args,**kwargs)
 
     category = models.ForeignKey(Category)
     title = models.CharField(max_length=128, default = "")
@@ -42,7 +41,12 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(Post, self).save(*args, **kwargs)
 
+# Comment model which takes all the fields defined below
+# and contains relationships with post and userprofile model
 class Comment(models.Model):
     title = models.CharField(default = "Comment", max_length = 128)
     time = models.CharField(default = '', max_length=128)
@@ -54,6 +58,7 @@ class Comment(models.Model):
     def __str__(self):
         return self.title
 
+#Userprofile model that takes all the fields defined below
 class UserProfile(models.Model):
     # links UserProfile to a user model instance
     user = models.OneToOneField(User,on_delete=models.CASCADE)

@@ -64,7 +64,7 @@
                         {% if post %}
                             {% for userpost in post %}
                                 <ul>
-                                    <li><strong>{{ userpost }}</strong></li>
+                                    <li><strong><a href="{% url 'workoutweb:show_post' userpost.category.slug userpost.slug %}">{{ userpost.title }}</a></strong></li>
                                 </ul>
                             {% endfor %}
                         {% else %}
@@ -81,9 +81,9 @@
                 <div class="row">
                     <div class="container">
                         {% if userspost %}
-                            {% for p in userspost %}
+                            {% for userpost in userspost %}
                                 <ul>
-                                    <li><strong>{{ p }}</strong></li>
+                                    <li><strong><a href="{% url 'workoutweb:show_post' userpost.category.slug userpost.slug %}">{{ userpost.title }}</strong></li>
                                 </ul>
                             {% endfor %}
                         {% else %}

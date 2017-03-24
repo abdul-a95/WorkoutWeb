@@ -18,23 +18,25 @@ import string
 
 
 def index(request):
+    #creating a list of the categories
     category_list = Category.objects.order_by()[:6]
-    user = UserProfile.objects.filter(user_id=request.user.id)
     context_dict = {}
-    context_dict['user1'] = user
     cat_dict = {}
     for category in category_list:
         try:
+            #for each category, get the top 5 liked posts
             posts = Post.objects.filter(category=category).order_by('-likes')[:5]
             cat_dict[category] = posts
         except Category.DoesNotExist:
             cat_dict[category] = None
+    #save the dictionary which contains the categories with their values being their posts in context_dict
     context_dict['categories'] = cat_dict
     return render(request,'workoutweb/index.html', context_dict)
 
 # returns a render request to the about page with empty context dictionary
 def about(request):
     context_dict = {}
+    #renders about.html
     return render(request, 'workoutweb/about.html', context_dict)
 
 # handles the account page view
@@ -74,8 +76,12 @@ def show_category(request, category_name_slug):
     # to the template rendering engine.
     context_dict = {}
     post = Post.objects.filter(user=request.user)
-    context_dict['userlikedposts'] = post
+    #if the user created the post then it's saved to usercreatedposts
+    #this is used when implementing the delete button for each post in category.html
+    context_dict['usercreatedposts'] = post
     context_dict['repeat'] = None
+
+    #this 'try except' retrieves a category and its posts ordered by likes.
     try:
         category = Category.objects.get(slug=category_name_slug)
         posts = Post.objects.filter(category=category).order_by('-likes')
@@ -88,6 +94,8 @@ def show_category(request, category_name_slug):
         category =  Category.objects.get(slug=category_name_slug)
     except Category.DoesNotExist:
         category = None
+
+    #----code for form----
     form = PostForm()
     # A HTTP POST?
     if request.method == 'POST':
@@ -102,6 +110,8 @@ def show_category(request, category_name_slug):
                     now = datetime.datetime.now()
                     post.time = now.strftime('Posted On ' '%B ''%d'', ''%Y '' at ''%I'':''%M'' %p')
                     letters = False
+
+                    #this loop is to ensure there are letters in the post title as the slug doesn't include symbols.
                     for n in post.title:
                         print n
                         if n in string.ascii_letters:
@@ -116,6 +126,7 @@ def show_category(request, category_name_slug):
         else:
             print(form.errors)
     context_dict['form'] = form
+    #----code for form----
     return render(request, 'workoutweb/category.html', context_dict)
 
 
@@ -123,16 +134,19 @@ def show_post(request, post_name_slug, category_name_slug):
     # Create a context dictionary which we can pass
     # to the template rendering engine.
     context_dict = {}
-    #  if request.user in post.userliked:
-       # context_dict['liked'] = True
     try:
+        #if the user has liked the post then 'liked' in context_dict is set to true
+        #this is for the like/dislike button. if liked then the dislike button shows, else the like.
         post = Post.objects.get(slug=post_name_slug)
         for userlike in post.userliked.all():
             if userlike == request.user:
                 context_dict['liked'] = True
+
+        #comments for the post are saved to 'comments'
         comments = Comment.objects.filter(post=post)
         context_dict['post'] = post
         context_dict['comments'] = comments
+        #views increment when the page is viewed
         post.views = post.views + 1
         post.save()
     except Post.DoesNotExist:
@@ -143,6 +157,8 @@ def show_post(request, post_name_slug, category_name_slug):
         post =  Post.objects.get(slug=post_name_slug)
     except Post.DoesNotExist:
         post = None
+
+    #----code for form----
     form = CommentForm()
     # A HTTP POST?
     if request.method == 'POST':
@@ -163,39 +179,50 @@ def show_post(request, post_name_slug, category_name_slug):
                 comment.save()
 
     context_dict['form'] = form
+    #----code for form----
     return render(request, 'workoutweb/post.html', context_dict)
 
 
+#called when the like button is clicked
 def liked(request,post_name_slug,category_name_slug):
     post = Post.objects.get(slug=post_name_slug)
+    #if the user hasn't already liked the post then the likes increase
+    #and the user is added to 'userliked' in post. Which is a many-to-many field.
     if post not in Post.objects.filter(userliked = request.user):
         post.likes = post.likes + 1
         post.save()
         post.userliked.add(request.user.id)
         request.method = 'LIKE'
+    #redirect back to the post page after liking
     return show_post(request,post_name_slug,category_name_slug)
 
+#called when the dislike button is clicked
 def disliked(request,post_name_slug,category_name_slug):
     post = Post.objects.get(slug=post_name_slug)
+    #if the user hasn't already disliked the post then the likes decrease
+    #and the user is removed from 'userliked' in post.
     if post in Post.objects.filter(userliked = request.user):
         post.likes = post.likes - 1
         post.save()
         post.userliked.remove(request.user.id)
         request.method = 'LIKE'
+    # redirect back to the post page after disliking
     return show_post(request,post_name_slug,category_name_slug)
 
+
+#called when remove post button is clicked
 def removepost(request,post_name_slug,category_name_slug):
+    #post is retrived from Post.objects and then deleted.
     post = Post.objects.get(slug=post_name_slug)
     post.delete()
     request.method = 'GET'
+    #redirect user back to to category page
     return show_category(request,category_name_slug)
 
-# view for registering a user
-# making use of userform and userprofileform
-# returns a context dictionary of botb tbese forms and whether user successfully registered
 def register(request):
     registered = False
     context_dict = {}
+    #----coding for form--------
     if request.method == 'POST':
         user_form = UserForm(data=request.POST)
         profile_form = UserProfileForm(data=request.POST)
@@ -209,8 +236,7 @@ def register(request):
             profile = profile_form.save(commit=False)
             profile.user = user
 
-            # checks to see if a picture has been uploaded
-            # optional field
+            #if the user has a picture then it is set at the profile picture
             if 'Picture' in request.FILES:
                 profile.picture = request.FILES['Picture']
 
@@ -223,11 +249,14 @@ def register(request):
                 context_dict['error'] = user_form.errors[error]
             print(user_form.errors, profile_form.errors)
     else:
+
+
         user_form = UserForm()
         profile_form = UserProfileForm()
-
     context_dict['user_form'] = user_form
     context_dict['profile_form'] = profile_form
+    # ----coding for form--------
+
     context_dict['registered'] = registered
     return render(request,'registration/registration_form.html',context_dict)
 
@@ -275,6 +304,7 @@ def user_login(request):
 
 @login_required
 def restricted(request):
+    #render restricted.html
     return render(request, 'workoutweb/restricted.html',{})
 
 def user_logout(request):
@@ -283,8 +313,11 @@ def user_logout(request):
     # Take the user back to the homepage.
     return HttpResponseRedirect(reverse('index'))
 
+
 def contact(request):
+    # ----coding for form--------
     form_class = ContactForm
+
     if request.method == 'POST':
         form = form_class(data=request.POST)
 
@@ -299,7 +332,7 @@ def contact(request):
 
             # Email the profile with the
             # contact information
-            template =\
+            template = \
                 get_template('contact_template.txt')
             context = Context({
                 'contact_name': contact_name,
@@ -317,7 +350,10 @@ def contact(request):
             )
             email.send()
             return redirect('contact')
-    return render(request, 'workoutweb/contact.html',{'form': form_class})
+    # ----coding for form--------
+    return render(request, 'workoutweb/contact.html', {'form': form_class})
+
+
 
 # view which allows users to change their account details
 # i.e bio height and weight or upload a picture

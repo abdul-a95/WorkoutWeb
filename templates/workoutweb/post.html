@@ -14,7 +14,7 @@
                 <!-- Blog Post -->
 
                 {% if post %}
-                    <h1><b>{{ post.title }}</b></h1>
+                    <h1><strong>{{ post.title }}</strong></h1>
 
                     <!-- Author -->
                     <p class="lead">
@@ -22,7 +22,7 @@
                     </p>
 
                     <!-- Date/Time -->
-                    <p><span class="glyphicon glyphicon-time"></span> {{ post.time }}
+                    <p><span class="glyphicon glyphicon-time"></span> {{ post.time }}</p>
                     <hr>
 
                     <!-- Post Content -->
@@ -61,8 +61,7 @@
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
                     </div>
-
-            <div>
+                <div>
 
                 <!-- Comments Section -->
                 <h2>Comment Section</h2>
@@ -71,8 +70,8 @@
                         {% if comment.user %}
                             <div class="media">
                                  <a class="pull-left">
-                                     {% if user.userprofile.picture %}
-                                        <img class="media-object" src="{{ MEDIA_URL }}{{ user.userprofile.picture}}"height="64"width="64"/>
+                                     {% if comment.user.userprofile.picture %}
+                                        <img class="media-object" src="{{ MEDIA_URL }}{{ comment.user.userprofile.picture}}"height="64"width="64"/>
                                      {% else %}
                                         <img class = "media-object" src="{% static 'images/default-profile.jpg' %}"height="64"width="64"/>
                                     {% endif %}
@@ -83,7 +82,7 @@
                                         <small><span class="glyphicon glyphicon-time"></span>{{ comment.time }}</small>
                                     </h4>
                                     <p>{{ comment.content }}</p>
-                                    </div>
+                                </div>
                             </div>
                         {% else %}
                             <div class="media">

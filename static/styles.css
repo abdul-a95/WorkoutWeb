@@ -28,15 +28,6 @@ h1{
 	text-indent: 13%;
 }
 
-.topcorner {
-    position:absolute;
-    top:10%;
-    right:5%;
-	max-width: 100%;
-    height: auto;
-    width: auto\9;
-}
-
 /* Remove the navbar's default margin-bottom and rounded borders */
 .navbar {
   margin-bottom: 0;
@@ -221,6 +212,7 @@ tr:last-of-type td:last-child {
     right: 10px;
 }
 
+/*Profile picture is given default background and borders*/
 .profilepic {
    padding:1px;
    border:1px solid white;

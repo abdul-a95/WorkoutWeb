@@ -16,6 +16,8 @@
                 {% if error %}
                      <b><font size="3" color="red">{{ error }}</font></b>
                 {% endif %}
+
+                <!-- Registration form -->
                 <form id="user_form" method="post" action="."
                           enctype="multipart/form-data">
                     {% csrf_token %}

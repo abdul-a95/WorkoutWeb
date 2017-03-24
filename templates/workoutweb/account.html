@@ -8,8 +8,8 @@
 
 {% block body_block %}
 
+    <!-- User's profile picture and default background picture -->
     <div class = "profilepic">
-
         {% if user.userprofile.picture %}
             <img class="img-circle img-center" src="{{ MEDIA_URL }}{{ user.userprofile.picture}}"
                 alt="profilepic" width="300" height="300"/>
@@ -17,46 +17,85 @@
             <img class="img-circle img-center" src="{% static 'images/default-profile.jpg' %}"
                 alt="profilepic" width="300" height="300"/>
         {% endif %}
-
     </div>
 
-    <div>
-    <h1><p>Username: {{ user.userprofile.user }}</p></h1>
-    <p>Bio: {{ user.userprofile.bio }}</p>
-    {% if user.userprofile.weight %}
-    <p>Weight: {{ user.userprofile.weight }}kg</p>
-    {% else %}
-    <p>Weight: N/A</p>
-    {% endif %}
-    {% if user.userprofile.height %}
-        <p>Height: {{ user.userprofile.height }}cm</p>
-    {% else %}
-        <p>Height: N/A</p>
-    {% endif %}
+    <div class="container">
+
+        <!-- Introduction Row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Username: {{ user.userprofile.user }}</h1>
+                <strong>Bio:</strong> <p>{{user.userprofile.bio }}<br></p>
+            </div>
+            <div class="col-sm-2">
+                <div>
+                    <strong>Details:</strong>
+                    <div class="row">
+                        <div class="container">
+                            {% if user.userprofile.weight %}
+                                <p>Weight: {{ user.userprofile.weight }}kg</p>
+                            {% else %}
+                                <p>Weight: N/A</p>
+                            {% endif %}
+                            {% if user.userprofile.height %}
+                                <p>Height: {{ user.userprofile.height }}cm</p>
+                            {% else %}
+                                <p>Height: N/A</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <strong>click here to update your profile page</strong>
+        <a href="{% url 'workoutweb:account_settings' %}">Account Settings</a></br>
+        <hr>
     </div>
 
-    <h2>Posts you have liked</h2>
-    {% if post %}
-        {% for userpost in post %}
-        <ul>
-            <li><strong>{{ userpost }}</strong></li>
-        </ul>
-        {% endfor %}
-    {% else %}
-        <p>No posts to show</p>
-    {% endif %}
+    <!-- Row 2 for list of liked posts and posts created; split into 2 columns -->
+    <div class="row">
 
-    <h2>Posts you have made</h2>
-    {% if userspost %}
-        {% for p in userspost %}
-        <ul>
-            <li><strong>{{ p }}</strong></li>
-        </ul>
-        {% endfor %}
-    {% else %}
-        <p>No posts to show</p>
-    {% endif %}
-    <strong>click here to update your profile page</strong>
-    <a href="{% url 'workoutweb:account_settings' %}">Account Settings</a></br>
+        <div class="col-sm-6">
+            <div class="well">
+                <h4>Posts you liked:</h4>
+                <div class="row">
+                    <div class="container">
+                        {% if post %}
+                            {% for userpost in post %}
+                                <ul>
+                                    <li><strong>{{ userpost }}</strong></li>
+                                </ul>
+                            {% endfor %}
+                        {% else %}
+                            <p>No posts to show</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="well">
+                <h4>Your Posts:</h4>
+                <div class="row">
+                    <div class="container">
+                        {% if userspost %}
+                            {% for p in userspost %}
+                                <ul>
+                                    <li><strong>{{ p }}</strong></li>
+                                </ul>
+                            {% endfor %}
+                        {% else %}
+                            <p>No posts to show</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
 {% endblock %}
 

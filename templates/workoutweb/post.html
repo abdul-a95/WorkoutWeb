@@ -14,42 +14,43 @@
                 <!-- Blog Post -->
 
                 {% if post %}
-                      <h1><b>{{ post.title }}</b></h1>
+                    <h1><b>{{ post.title }}</b></h1>
 
-                <!-- Author -->
-                <p class="lead">
-                    by <small>{{post.user}}</small></a>
-                </p>
+                    <!-- Author -->
+                    <p class="lead">
+                        by <small>{{post.user}}</small></a>
+                    </p>
 
-                <!-- Date/Time -->
-                <p><span class="glyphicon glyphicon-time"></span> {{ post.time }}
-                <hr>
+                    <!-- Date/Time -->
+                    <p><span class="glyphicon glyphicon-time"></span> {{ post.time }}
+                    <hr>
 
-                <!-- Post Content -->
-                <div class="lead">
-                    <p>{{ post.content }} </p>
-                </div>
-
-
-                {% if liked %}
-                    <form action="/workoutweb/category/{{ post.category.slug }}/{{ post.slug }}/disliked/" method="post">
-                        {% csrf_token %}
-                        <button type="submit" value="preview" name="Preview">Dislike</button>
-                    </form>
-                {% else %}
-                {% if user.is_authenticated %}
-                     <form action="/workoutweb/category/{{ post.category.slug }}/{{ post.slug }}/liked/" method="post">
-                         {% csrf_token %}
-                        <button type="submit" value="preview" name="Preview">Like</button>
-                     </form>
-                {% endif %}
-                {% endif %}
-                        <p><span class="glyphicon glyphicon-thumbs-up"</span><b>likes:</b>{{post.likes}}</p>
+                    <!-- Post Content -->
+                    <div class="lead">
+                        <p>{{ post.content }} </p>
+                    </div>
 
 
-                <!-- Blog Comments -->
+                    <!-- Likes/Unlike -->
+                    {% if liked %}
+                        <form action="/workoutweb/category/{{ post.category.slug }}/{{ post.slug }}/disliked/" method="post">
+                            {% csrf_token %}
+                            <button type="submit" value="preview" name="Preview">Unlike</button>
+                        </form>
+                    {% else %}
+                    {% if user.is_authenticated %}
+                         <form action="/workoutweb/category/{{ post.category.slug }}/{{ post.slug }}/liked/" method="post">
+                            {% csrf_token %}
+                            <button type="submit" value="preview" name="Preview">Like</button>
+                         </form>
+                    {% endif %}
+                    {% endif %}
+                    <p><span class="glyphicon glyphicon-thumbs-up"</span><b>likes:</b>{{post.likes}}</p>
 
-                <!-- Comments Form -->
+
+                    <!-- Blog Comments -->
+
+                    <!-- Comments Form -->
                     <div class="well">
                         <h4>Leave a Comment:</h4>
                         <form id="comment_form" method="post" action="/workoutweb/category/{{ post.category.slug }}/{{ post.slug }}/">
@@ -62,6 +63,8 @@
                     </div>
 
             <div>
+
+                <!-- Comments Section -->
                 <h2>Comment Section</h2>
                 {% if comments %}
                     {% for comment in post.comments.all %}
